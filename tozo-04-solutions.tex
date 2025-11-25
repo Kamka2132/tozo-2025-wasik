@@ -1,0 +1,296 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Zadanie 1}
+\subsection{0}
+$q_1$0 $\vdash$ $\sqcup$$q_2$$\sqcup$ $\vdash$ $\sqcup$$q_A$\\
+ciąg stanów: ($q_1$, $q_2$, $q_A$)
+\subsection{00}
+$q_1$00 $\vdash$ $\sqcup$$q_2$0 $\vdash$ $\sqcup$x$q_3$$\sqcup$ $\vdash$ $\sqcup$$q_5$x$\sqcup$ $\vdash$ $q_5$$\sqcup$x$\sqcup$ $\vdash$ $\sqcup$$q_2$x$\sqcup$ $\vdash$ $\sqcup$x$q_2$$\sqcup$ $\vdash$ $\sqcup$x$\sqcup$$q_A$\\
+ciąg stanów: ($q_1$, $q_2$, $q_3$, $q_5$, $q_5$, $q_2$, $q_2$, $q_A$)
+\subsection{000}
+$q_1000$ $\vdash$ $\sqcup$$q_2$00 $\vdash$ $\sqcup$x$q_3$0 $\vdash$ $\sqcup$x0$q_4$$\sqcup$ $\vdash$ $\sqcup$x0$\sqcup$$q_R$\\
+ciąg stanów: ($q_1$, $qq_2$, $q_3$, $q_4$, $q_R$)
+\subsection{000000}
+$q_1$000000 $\vdash$ $\sqcup$$q_2$00000 $\vdash$ $\sqcup$x$q_3$0000 $\vdash$ $\sqcup$x0$q_4$000 $\vdash$ $\sqcup$x0x$q_5$00 $\vdash$ $\sqcup$x0x0$q_4$0 $\vdash$ $\sqcup$x0x0x$q_3$$\sqcup$ $\vdash$ $\sqcup$x0x0$q_5$x $\vdash$ $\sqcup$x0x$q_5$0x $\vdash$ $\sqcup$x0$q_5$x0x $\vdash$ $\sqcup$x$q_5$0x0x $\vdash$ $\sqcup$$q_5$x0x0x $\vdash$ $q_5$$\sqcup$x0x0x $\vdash$ $\sqcup$$q_2$x0x0x $\vdash$ $\sqcup$x$q_2$0x0x $\vdash$ $\sqcup$xx$q_3$x0x $\vdash$ $\sqcup$xxx$q_3$0x $\vdash$ $\sqcup$xxx0$q_4$x $\vdash$ $\sqcup$xxx0x$q_4$$\sqcup$ $\vdash$ $\sqcup$xxx0x$\sqcup$$q_R$\\
+ciąg stanów: ($q_1$, $q_2$, $q_3$, $q_4$, $q_5$, $q_4$, $q_3$, $q_5$, $q_5$, $q_5$, $q_5$, $q_5$, $q_5$, $q_2$, $q_2$, $q_3$, $q_3$, $q_4$, $q_4$, $q_R$)
+\newpage
+\section{Zadanie 2}
+Dwustronnie nieskończoną taśmę maszyny Turinga możemy stworzyć poprzez połączenie dwóch, prawostronnych, nieskończonych taśm.
+\begin{itemize}
+    \item Komórki należące do prawej taśmy (0, 1, 2, 3, ...) zostaną zapisane na pozycjach parzystych, tzn. 0 $\longrightarrow$ 0, 1 $\longrightarrow$ 2, 2 $\longrightarrow$ 4, ...
+    \item Komórki należące do lewej taśmy (-1, -2, -3, ...) zostaną zapisane na pozycjach nieparzystych, tzn. -1 $\longrightarrow$ 1, -2 $\longrightarrow$ 3, -2 $\longrightarrow$ 5, ...
+\end{itemize}
+W przedstawiony sposób, co druga komórka reprezentuje odpowiednią taśmę i dzięki temu jednotaśmowa maszyna Turinga ma na swojej taśmie zakodowaną całą dwustronną taśmę. Aby zasymulować każdy ruch maszyna potrzebuje więcej kroków - będzie przeskakiwać, co drugą komórkę.
+
+\section{Zadanie 3}
+\subsection{Jednotaśmowa maszyna Turinga}
+Opis działania:
+\begin{enumerate}
+    \item Bierzemy pierwszy nieoznaczony symbol a (z lewej) i oznaczay go - a $\rightarrow$ X lub b $\rightarrow$ Y
+    \item Przesuwamy się w prawo aż do ostatniego nieoznaczonego symbolu
+    \item Porównujemy ten symbol i jeżeli zgadza się z pierwszym oznaczamy go analogicznie jak pierwszy, jeżeli nie zgadza się to odrzucamy
+    \item Maszyna wraca na początek, do kolejnego nieoznaczonego symbolu i powtarza działanie
+    \item Gdy wszystkie symbole będą oznaczone - akceptuj
+\end{enumerate}
+
+Opis formalny:
+
+P$_1$ = (Q, $\Sigma$, $\Gamma$, $\delta$, q$_0$, q$_A$, q$_R$):
+
+Q = \{q$_1$, q$_2$, q$_3$, q$_5$\}
+
+$\Sigma$ = \{a, b\}
+
+$\Gamma$ = \{a, b, X, Y, $\sqcup$\}
+
+funkcja przejścia dla słowa abba:\\
+q$_1$abba $\vdash$ Xq$_2$bba $\vdash$ Xbq$_2$ba $\vdash$ Xbbq$_2$a $\vdash$ Xbbaq$_3$$\sqcup$ $\vdash$ XbbXq$_5$ $\vdash$ Xbbq$_5$X $\vdash$ Xbq$_5$bX $\vdash$ Xq$_5$bbX $\vdash$ q$_1$XbbX $\vdash$ XYq$_2$bX $\vdash$ XYbq$_2$X $\vdash$ XYbXq$_3$$\sqcup$ $\vdash$ XYbq$_5$X $\vdash$ XYq$_5$YX $\vdash$ Xq$_5$YYX $\vdash$ q$_A$XYYX
+
+Ilość przejść głowicy: n$^2$
+
+\subsection{Dwutaśmowa maszyna Turinga}
+
+Opis formalny:
+
+P$_2$ = (Q, $\Sigma$, $\Gamma$, $\delta$, q$_0$, q$_A$, q$_R$):
+
+Q = \{q$_1$, q$_2$, q$_3$\}
+
+$\Sigma$ = \{a, b\}
+
+$\Gamma$ = \{a, b, X, Y, $\sqcup$\}
+
+funkcja przejścia dla słowa abba:
+\begin{itemize}
+    \item kopiowanie taśmy\\
+    q$_1$abba, $\sqcup$$\sqcup$$\sqcup$$\sqcup$ $\vdash$ aq$_1$bba, a$\sqcup$$\sqcup$$\sqcup$ $\vdash$ abq$_1$ba, ab$\sqcup$$\sqcup$ $\vdash$ abbq$_1$a, abb$\sqcup$ $\vdash$ abbaq$_1$$\sqcup$, abba$\sqcup$ (koniec kopiowania)
+    \item głowica nr2 przesuwa się na koniec:\\
+    abbaq$_2$$\sqcup$, q$_2$abba$\sqcup$ $\vdash$ abbaq$_2$$\sqcup$, aq$_2$bba $\vdash$ abbaq$_2$$\sqcup$, abq$_2$ba $\vdash$ abbaq$_2$$\sqcup$, abbq$_2$a $\vdash$ abbaq$_2$$\sqcup$, abbaq$_2$$\sqcup$
+    \item porównywanie par symboli:\\
+    q$_3$abba, abba $\vdash$ Xq$_3$bba, abbX $\vdash$ XYq$_3$ba, abYX $\vdash$ XYYq$_3$a, aYYX $\vdash$ XYYXq$_3$$\sqcup$, XYYX $\vdash$ XYYXq$_A$, XYYX
+
+\end{itemize}
+
+Ilość przejść głowicy: n
+
+\section{Zadanie 4}
+
+P = (Q, $\Sigma$, $\Gamma$, $\delta$, q$_0$, q$_A$, q$_R$)
+
+$\Sigma$ = \{0, 1\}
+
+$\Gamma$ = \{0, 1, X, $\sqcup$\}
+
+Metoda działania:
+\begin{itemize}
+    \item Wybieramy pierwszy neioznaczony symbol 0 lub 1
+    \item Oznaczamy jako X
+    \item Przesuwamy głowicę w prawo szukając opowiedniego symbolu, czyli takiego samego, którego oznaczyliśmy X (jeżeli było to 0 to szukamy 1 i odwrotnie)
+    \item Oznaczamy sparowany symbol X
+    \item Cofamy się na początek słowa
+    \item Powtarzamy czynność. Jeżeli nie znajdziemy symbolu do sparowania to q$_R$.
+\end{itemize}
+
+funkcja przejścia dla słowa 01101:
+
+q$_0$01101 $\vdash$ Xq$_1$1101 $\vdash$ X1q$_1$101 $\vdash$ X11q$_1$01 $\vdash$ X110q$_1$1 $\vdash$ X110Xq$_3$ $\vdash$ X11q$_3$0X $\vdash$ X1q$_3$10X $\vdash$ Xq$_3$110X $\vdash$ q$_0$X110X $\vdash$ XXq$_2$10X $\vdash$ XX1q$_2$0X $\vdash$ XX10q$_2$X $\vdash$ XX1Xq$_3$X $\vdash$ XXq$_3$1XX $\vdash$ Xq$_3$X1XX $\vdash$ q$_0$XXX1X $\vdash$ XXXq$_2$1X $\vdash$ XXX1q$_2$X $\vdash$ q$_R$XXX1X
+
+
+\section{Zadanie 5}
+
+Maszyna Turinga $NAST$ przekształca binarną reprezentację liczby $d$ w słowo będące binarną reprezentacją liczby $d+1$. Maszyna realizuje operację dodawania '1' w systemie dwójkowym.
+
+\subsection{Koncepcja Działania}
+
+Maszyna $NAST$ działa w trzech głównych fazach:
+\begin{enumerate}
+    \item Skanowanie do prawej ($q_0$) \\
+    Przesuwa głowicę na prawy kraniec słowa wejściowego.
+    \item Dodawanie i przeniesienie ($q_1$) \\
+    Skanuje w lewo, zamieniając wszystkie napotkane '1' na '0' (przeniesienie). Pierwsza napotkana '0' jest zamieniana na '1', a operacja dodawania zostaje zakończona. Jeśli maszyna napotka $\sqcup$ (pustą komórkę) przed '0' (słowo złożone z samych '1', np. $111 \to 1000$), zapisuje '1' w tej komórce.
+    \item Powrót i zatrzymanie ($q_2, q_{\text{halt}}$) \\
+    Powrót na lewy kraniec, aby zatrzymać się w stanie $q_{\text{halt}}$ na pierwszym symbolu wyniku.
+\end{enumerate}
+
+\subsection{Formalny opis Maszyny Turinga $NAST$}
+
+Maszyna Turinga $NAST$ jest zdefiniowana jako $M = (Q, \Sigma, \Gamma, \delta, q_0, q_{\text{halt}})$, gdzie:
+
+\begin{itemize}
+    \item \textbf{Zbiór Stanów ($Q$):} $Q = \{q_0, q_1, q_2, q_{\text{halt}}\}$.
+        \begin{itemize}
+            \item $q_0$: Skanowanie w prawo (inicjalizacja).
+            \item $q_1$: Skanowanie w lewo (dodawanie/przeniesienie).
+            \item $q_2$: Skanowanie w lewo (powrót na początek).
+            \item $q_{\text{halt}}$: Stan zatrzymania.
+        \end{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{0, 1\}$.
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{0, 1, \sqcup\}$.
+    \item \textbf{Stan Początkowy ($q_0$):} $q_0$.
+    \item \textbf{Stan Zatrzymania ($q_{\text{halt}}$):} $q_{\text{halt}}$.
+\end{itemize}
+
+\subsection{Funkcja Przejścia ($\delta$)}
+
+Funkcja przejścia $\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R, S\}$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Stan bieżący} & \textbf{Symbol odczytany} & \textbf{Nowy Stan} & \textbf{Operacja (Zapis, Ruch)} \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Faza I: Skanowanie do Prawej ($q_0$)}} \\
+\hline
+$q_0$ & $0$ & $q_0$ & $(0, R)$ \\
+$q_0$ & $1$ & $q_0$ & $(1, R)$ \\
+$q_0$ & $\sqcup$ & $q_1$ & $(\sqcup, L)$ \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Faza II: Dodawanie i Przeniesienie ($q_1$)}} \\
+\hline
+$q_1$ & $1$ & $q_1$ & $(0, L) \quad \text{(Przeniesienie: } 1 \to 0)$ \\
+$q_1$ & $0$ & $q_2$ & $(1, L) \quad \text{(Dodano '1', koniec przenoszenia)}$ \\
+$q_1$ & $\sqcup$ & $q_2$ & $(1, L) \quad \text{(Przepełnienie: } \sqcup \to 1)$ \\
+\hline
+\multicolumn{4}{|c|}{\textbf{Faza III: Powrót i Zatrzymanie ($q_2, q_{\text{halt}}$)}} \\
+\hline
+$q_2$ & $0$ & $q_2$ & $(0, L)$ \\
+$q_2$ & $1$ & $q_2$ & $(1, L)$ \\
+$q_2$ & $\sqcup$ & $q_{\text{halt}}$ & $(\sqcup, R) \quad \text{(Powrót na początek wyniku)}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Przykład Działania dla słowa $010011$ ($19_{10}$)}
+
+\begin{enumerate}
+    \item $(q_0, \mathbf{0}10011\sqcup)$ $\xrightarrow{R^*}$ $(\sqcup 010011\mathbf{q_0}\sqcup)$
+    \item $(q_0, \sqcup) \to (q_1, \sqcup, L)$: $(\sqcup 01001\mathbf{q_1}1)$ (Koniec słowa, start dodawania)
+    \item $(q_1, 1) \to (q_1, 0, L)$: $(\sqcup 0100\mathbf{q_1}0)$
+    \item $(q_1, 1) \to (q_1, 0, L)$: $(\sqcup 010\mathbf{q_1}00)$
+    \item $(q_1, 0) \to (q_2, 1, L)$: $(\sqcup 01\mathbf{q_2}100)$ (Zapisano '1', koniec przenoszenia, start powrotu)
+    \item $(q_2, 1) \to (q_2, 1, L)$: $(\sqcup 0\mathbf{q_2}1100)$
+    \item $(q_2, 0) \to (q_2, 0, L)$: $(\sqcup \mathbf{q_2}01100)$
+    \item $(q_2, \sqcup) \to (q_{\text{halt}}, \sqcup, R)$: $(\sqcup \mathbf{q_{\text{halt}}}010100)$ (Zatrzymanie na pierwszym symbolu: $20_{10}$)
+\end{enumerate}
+
+
+\section{Zadanie 6}
+
+Maszyna Turinga $COPY$ otrzymuje na wejściu słowo $1^n$, a na wyjściu zwraca $1^n \sqcup 1^n$. Maszyna nie posiada stanów $q_{\text{accept}}$ oraz $q_{\text{reject}}$.
+
+\subsection{Formalny opis Maszyny Turinga $COPY$}
+
+Maszyna Turinga $COPY$ jest zdefiniowana jako $M = (Q, \Sigma, \Gamma, \delta, q_0, q_{\text{halt}})$, gdzie:
+
+\begin{itemize}
+    \item \textbf{Zbiór Stanów ($Q$):} $Q = \{q_0, q_1, q_2, q_3, q_{\text{cleanup}}, q_{\text{halt}}\}$.
+        \begin{itemize}
+            \item $q_0$: Skanowanie, szukanie kolejnego '1' do skopiowania.
+            \item $q_1$: Kopiowanie, skanowanie do prawej.
+            \item $q_2$: Powrót do lewego krańca, szukanie $X$.
+            \item $q_3$: Oznaczenie separatora $\sqcup$ na $\sqcup$, przesunięcie do $\sqcup$.
+            \item $q_{\text{cleanup}}$: Usuwanie symboli $X$.
+            \item $q_{\text{halt}}$: Stan zatrzymania.
+        \end{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{1\}$.
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{1, \sqcup, X\}$.
+    \item \textbf{Stan Początkowy ($q_0$):} $q_0$.
+    \item \textbf{Stan Zatrzymania ($q_{\text{halt}}$):} $q_{\text{halt}}$.
+\end{itemize}
+
+\subsection{Funkcja przejścia ($\delta$)}
+
+Funkcja przejścia $\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R, S\}$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|p{4.5cm}|}
+\hline
+\textbf{Stan bieżący} & \textbf{Odczyt} & \textbf{Nowy Stan} & \textbf{Operacja} & \textbf{Opis Fazy} \\
+\hline
+\multicolumn{5}{|c|}{\textbf{Faza I: Oznaczanie symbolu wejściowego ($q_0$)}} \\
+\hline
+$q_0$ & $1$ & $q_1$ & $(X, R)$ & Znaleziono '1', oznacz jako $X$, szukaj miejsca na kopii. \\
+$q_0$ & $X$ & $q_0$ & $(X, R)$ & Pomijanie już przetworzonych $X$. \\
+$q_0$ & $\sqcup$ & $q_{\text{cleanup}}$ & $(\sqcup, L)$ & Całe słowo wejściowe zostało zamienione na $X^n\sqcup$. Start fazy końcowej. \\
+\hline
+\multicolumn{5}{|c|}{\textbf{Faza II: Skanowanie do Prawej i Kopiowanie ($q_1$)}} \\
+\hline
+$q_1$ & $1$ & $q_1$ & $(1, R)$ & Pomijanie pozostałych '1' pierwszego bloku. \\
+$q_1$ & $\sqcup$ & $q_3$ & $(\sqcup, R)$ & Znaleziono separator, ruszaj dalej. \\
+$q_3$ & $1$ & $q_3$ & $(1, R)$ & Pomijanie już skopiowanych '1'. \\
+$q_3$ & $\sqcup$ & $q_2$ & $(1, L)$ & Znaleziono miejsce na kopii, zapisz '1', wracaj. \\
+\hline
+\multicolumn{5}{|c|}{\textbf{Faza III: Powrót do lewego krańca ($q_2$)}} \\
+\hline
+$q_2$ & $1$ & $q_2$ & $(1, L)$ & Przesuwanie w lewo przez $1^n$. \\
+$q_2$ & $\sqcup$ & $q_2$ & $(\sqcup, L)$ & Przesuwanie w lewo przez $\sqcup$. \\
+$q_2$ & $X$ & $q_0$ & $(X, R)$ & Znaleziono $X$, idź w prawo, aby znaleźć następne '1' do skopiowania (nowy cykl). \\
+\hline
+\multicolumn{5}{|c|}{\textbf{Faza IV: Czyszczenie i Zatrzymanie ($q_{\text{cleanup}}, q_{\text{halt}}$)}} \\
+\hline
+$q_{\text{cleanup}}$ & $X$ & $q_{\text{cleanup}}$ & $(1, L)$ & Zamiana $X$ na '1' (czyszczenie). \\
+$q_{\text{cleanup}}$ & $\sqcup$ & $q_{\text{halt}}$ & $(\sqcup, R)$ & Znaleziono lewy $\sqcup$. Powrót na pierwszą komórkę i zatrzymanie. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\section{Zadanie 7}
+
+Maszyna $T$ przekształca słowo wejściowe $w$ w format \# $\bullet$ $\sigma_1 \dots \sigma_n$ \# $\bullet$ $\sqcup$ \# $\bullet$ $\sqcup$ \#, gdzie $\bullet$ oznacza pozycję głowicy na każdej symulowanej taśmie. Zakładamy istnienie stanów realizujących operację wstawiania/przesuwania słowa.
+
+\subsection{Formalny opis maszyny $T$}
+
+$T = (Q, \Sigma, \Gamma, \delta, q_0, q_{\text{halt}})$, gdzie:
+
+\begin{itemize}
+    \item \textbf{Zbiór stanów ($Q$):} $Q = \{q_0, q_{\text{shift}}, q_{\text{sep1}}, q_{\text{sep2}}, q_{\text{sep3}}, q_{\text{rewind}}, q_{\text{halt}}\}$.
+    \item \textbf{Alfabet wejściowy ($\Sigma$):} $\Sigma = \{a, b\}$.
+    \item \textbf{Alfabet taśmowy ($\Gamma$):} $\Gamma = \{a, b, \sqcup, \#, \bullet\}$.
+    \item \textbf{Stan początkowy ($q_0$):} $q_0$.
+    \item \textbf{Stan zatrzymania ($q_{\text{halt}}$):} $q_{\text{halt}}$.
+\end{itemize}
+
+\subsection{Kluczowe przejścia ($\delta$)}
+
+Przejścia są zorganizowane w sekwencje:
+
+\subsubsection*{1. Faza I: Wstawienie Inicjalizacyjne ($\# \bullet$ na początku)}
+\textit{Maszyna musi przesunąć całe słowo $w$ o dwie komórki w prawo, aby zwolnić miejsce na $\mathbf{\# \bullet}$ na początku taśmy. Poniższe przejścia to skrót na tę operację (operacja $\text{Insert}(\# \bullet)$).}
+$$\delta(q_0, \sqcup) = (q_{\text{shift}}, \#, R) \quad \text{(Zacznij przesuwanie i wstaw \#)}$$
+$$\delta(q_{\text{shift}}, \sigma) \dots \to \dots (q_{\text{sep1}}, \bullet, R) \quad \text{(Po przesunięciu, wstaw $\bullet$ przed } \sigma_1 \text{)}$$
+\text{(Zakładamy, że maszyna kończy w stanie $q_{\text{sep1}}$ za ostatnim symbolem $\sigma_n$).}
+
+\subsubsection*{2. Faza II: Inicjalizacja Taśm 2 i 3 (Wstawianie separatorów)}
+
+\textbf{Taśma 1 (Separacja):}
+$$\delta(q_{\text{sep1}}, \sqcup) = (q_{\text{sep2}}, \#, R) \quad \text{(Wstaw separator po Taśmie 1)}$$
+
+\textbf{Taśma 2:}
+$$\delta(q_{\text{sep2}}, \sqcup) = (q_{\text{sep2}}, \bullet, R) \quad \text{(Wstaw głowicę Taśmy 2)}$$
+$$\delta(q_{\text{sep2}}, \sqcup) = (q_{\text{sep3}}, \#, R) \quad \text{(Wstaw separator Taśmy 2)}$$
+
+\textbf{Taśma 3:}
+$$\delta(q_{\text{sep3}}, \sqcup) = (q_{\text{sep3}}, \bullet, R) \quad \text{(Wstaw głowicę Taśmy 3)}$$
+$$\delta(q_{\text{sep3}}, \sqcup) = (q_{\text{rewind}}, \#, L) \quad \text{(Ostatni separator, start powrotu)}$$
+
+\subsubsection*{3. Faza III: Powrót i Zatrzymanie ($q_{\text{rewind}}, q_{\text{halt}}$)}
+
+\textit{Powrót do pierwszego separatora \#.}
+$$\delta(q_{\text{rewind}}, c) = (q_{\text{rewind}}, c, L) \quad \text{dla } c \in \{a, b, \sqcup, \#, \bullet\}$$
+$$\delta(q_{\text{rewind}}, \#) = (q_{\text{halt}}, \#, S) \quad \text{(Zatrzymanie na pierwszym \#)}$$
+
+
+\end{document}
