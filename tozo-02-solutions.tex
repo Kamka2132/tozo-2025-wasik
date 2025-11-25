@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Wyrażenia regularne}
+ZADANIE 1
+\begin{enumerate}
+    \item a*b*\\
+    należą: ab, a, b\\
+    nie należą: ba, bba
+    \item a(ba)*b\\
+    należą: ab, abab\\
+    nie należą: b, baba
+    \item a* $\cup$ b*\\
+    należą: a, b \\
+    nie należą: bab, baba
+    \item (aaa)*\\
+    należą: aaa, aaaaaa\\
+    nie należą:b, aa, bab
+    \item $\Sigma$*a$\Sigma$*b$\Sigma$*a$\Sigma$*\\
+    należą: aba, aabaa\\
+    nie należą:a, b, bab
+    \item aba $\cup$ bab\\
+    należą: aba, bab\\
+    nie należą: a, b
+    \item ($\varepsilon$ $\cup$ a) b\\
+    należą: ab, b\\
+    nie należą: a, aa, bab
+    \item (a $\cup$ ba $\cup$ bb) $\Sigma$*\\
+    należą: a, ba, bb, aba\\
+    nie należą: a, $\varepsilon$, b
+\end{enumerate}
+
+\newpage
+ZADANIE 2
+\begin{enumerate}
+    \item \{w $\in$ $\Sigma$* $|$ w zaczyna się symbolem 1 i kończy się symbolem 0\}\\
+    odp: 1$\Sigma$*0
+    \item \{w $\in$ $\Sigma$* $|$ w zawiera przynajmniej trzy symbole 1\}\\
+    odp: $\Sigma$*1$\Sigma$*1$\Sigma$*1$\Sigma$*
+    \item \{w $\in$ $\Sigma$* $|$ w zawiera podsłowo 0101\}\\
+    odp: $\Sigma$*0101$\Sigma$*
+    \item \{w $\in$ $\Sigma$* $|$ w ma długość co najmniej 3 i jego trzecim symbolem jest 0\}\\
+    odp: $\Sigma$$\Sigma$0$\Sigma$*
+    \item \{w $\in$ $\Sigma$* $|$ w zaczyna się symbolem 0 i ma nieparzystą długość lub zaczyna się symbolem 1 i ma parzystą długość\}\\
+    odp: 0($\Sigma$$\Sigma$)* $\cup$ 1$\Sigma$($\Sigma$$\Sigma$)*
+    \item \{w $\in$ $\Sigma$* $|$ w nie zawiera podsłowa 110\}\\
+    odp: (0$\cup$(10)*)*1*
+    \item \{w $\in$ $\Sigma$* $|$ w ma długość co najwyżej 5\}\\
+    odp: ($\Sigma$$\cup$$\varepsilon$)$^5$
+    \item \{w $\in$ $\Sigma$* $|$ w jest dowolnym słowem różnym od 11 oraz od 111\}\\
+    odp: $\varepsilon$ $\cup$ $\Sigma$ $\cup$ 0$\Sigma$ $\cup$ 10 $\cup$ 0$\Sigma$$\Sigma$ $\cup$ 10$\Sigma$ $\cup$ 110 $\cup$ $\Sigma$$^3$$\Sigma$$^+$
+    \item \{w $\in$ $\Sigma$* $|$ w na każdej nieparzystej pozycji w występuje symbol 1\}\\
+    odp: (1$\Sigma$)*(1$\cup$$\varepsilon$)
+    \item \{w $\in$ $\Sigma$* $|$ w zawiera co najmniej dwa symbole 0 oraz co najwyżej jeden symbol 1\}\\
+    odp: (0 $\cup$ 1)*0 (0$\cup$1)*0 (0$\cup$1)* $\cap$ (0*$\cup$0*10*)
+    \item \{$\varepsilon$, 0\}\\
+    odp: ($\varepsilon$ $\cup$ 0)
+    \item \{w $\in$ $\Sigma$* $|$ w zawiera parzystą liczbę symboli 0 lub zawiera dokładnie dwa symbole 1\}\\
+    odp: 1*(01*0)*1* $\cup$ 0*10*10*
+    \item $\varnothing$\\
+    odp: Język pusty nie zawiera żadnego słowa
+    \item \{w $\in$ $\Sigma$* $|$ w $\neq$ $\varepsilon$ (wszystkie słowa niepuste)\}\\
+    odp: (0$\cup$1)(0$\cup$1)*
+\end{enumerate}
+
+\section{Gramatyki bezkontekstowe}
+ZADANIE 1\\
+a) symbole nieterminalne (zmienne): R, S, T, X\\
+b) symbole terminalne: a, b\\
+c) symbol początkowy: R\\
+d) 3 słowa z języka L(G): aab, bba, ab\\
+e) 3 słowa, które nie należą do tego języka: $\varepsilon$, aaa, b \\
+f) Czy prawdą jest, że:\\
+\begin{enumerate}
+    \item T $\Rightarrow$ aba FAŁSZ
+    \item T $\Rightarrow$* aba PRAWDA
+    \item T $\Rightarrow$ T FAŁSZ
+    \item T $\Rightarrow$* T PRAWDA
+    \item XXX $\Rightarrow$* aba PRAWDA
+    \item X $\Rightarrow$* aba FAŁSZ
+    \item T $\Rightarrow$* XX PRAWDA
+    \item T $\Rightarrow$* XXX PRAWDA
+    \item S $\Rightarrow$* $\varepsilon$ FAŁSZ
+\end{enumerate}
+g) Gramatyka G generuje takie słowa, które można zapisać w postaci u s rev(u), gdzie:\\
+u - dowolne słowo nad \{a,b\}\\
+s - środkowy blok pochodzący z reguły S. Ma postać aTb lub bTa, przy czym T jest palindromem nad \{a,b\}\\
+rev(u) - lustrzane odbicie u\\
+Każdy ciąg składa się z symetrycznych części skrajnych oraz środkowego fragmentu, który zaczyna się i kończy różnymi literami, a między nimi jest palindrom (możliwy pusty).\\
+
+
+ZADANIE 2\\
+a) Zbiór słów wszystkich słów zawierających tyle samo a co b\\
+S $\rightarrow$ aSb\\
+S $\rightarrow$ bSa\\
+S $\rightarrow$ SS\\
+S $\rightarrow$ $\varepsilon$\\
+b) Zbiór słów wszystkich słów zawierających co najmniej tyle samo a co b\\
+S $\rightarrow$ aS\\
+S $\rightarrow$ Sa\\
+S $\rightarrow$ SS\\
+S $\rightarrow$ E\\
+E $\rightarrow$ aEb\\
+E $\rightarrow$ bEa\\
+E $\rightarrow$ EE\\
+E $\rightarrow$ $\varepsilon$\\
+c) Zbiór słów wszystkich słów zawierających więcej a niż b\\
+S $\rightarrow$ aS\\
+S $\rightarrow$ Sa\\
+S $\rightarrow$ SS\\
+S $\rightarrow$ E\\
+E $\rightarrow$ aEb\\
+E $\rightarrow$ bEa\\
+E $\rightarrow$ EE\\
+E $\rightarrow$ $\varepsilon$\\
+T $\rightarrow$ a\\
+T $\rightarrow$ aT\\
+T $\rightarrow$ Ta\\
+T $\rightarrow$ TT\\
+T $\rightarrow$ Ea\\
+T $\rightarrow$ aE\\
+
+\section{Automaty ze stosem}
+
+ZADANIE 1
+
+b) (q$_1$, 0110, $\varepsilon$) $\rightarrow$ (q$_2$, 0110, $\$$)  $\rightarrow$ (q$_2$, 110, 0$\$$) $\rightarrow$ (q$_2$, 10, 10$\$$) $\rightarrow$ (q$_3$, 0, 10$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, 0$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, $\$$) $\rightarrow$ (q$_4$, $\varepsilon$, $\varepsilon$)\\
+
+c) (q$_1$, 110011, $\varepsilon$) $\rightarrow$ (q$_2$, 110011, $\$$)  $\rightarrow$ (q$_2$, 10011, 1$\$$) $\rightarrow$ (q$_2$, 0011, 11$\$$) $\rightarrow$ (q$_2$, 011, 011$\$$) $\rightarrow$ (q$_2$, 11, 0011$\$$) $\rightarrow$ (q$_3$, 1, 0011$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, 001$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, 00$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, 0$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, $\$$) $\rightarrow$ (q$_4$, $\varepsilon$, $\varepsilon$)\\
+
+d) (q$_1$, 101101, $\varepsilon$) $\rightarrow$ (q$_2$, 101101, $\$$)  $\rightarrow$ (q$_2$, 01101, 1$\$$)  $\rightarrow$ (q$_2$, 1101, 01$\$$)  $\rightarrow$ (q$_2$, 101, 101$\$$)  $\rightarrow$ (q$_2$, 01, 1101$\$$)  $\rightarrow$ (q$_3$, 1, 1101$\$$)  $\rightarrow$ (q$_3$, $\varepsilon$, 101$\$$)  $\rightarrow$ (q$_3$, $\varepsilon$, 01$\$$)  $\rightarrow$ (q$_3$, $\varepsilon$, 1$\$$) $\rightarrow$ (q$_3$, $\varepsilon$, $\$$) $\rightarrow$ (q$_4$, $\varepsilon$, $\varepsilon$)
+
+
+\end{document}
