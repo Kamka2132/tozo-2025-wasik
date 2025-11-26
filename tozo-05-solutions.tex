@@ -1,0 +1,114 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Zadanie 1}
+\subsection{Jeżeli niedeterministyczna maszyna Turinga N odrzuca słowo w, to N nie akceptuje słowa w.}
+\textbf{Prawda}. Jeżeli wszystkie gałęzie zatrzymują się w stanie odrzucającym, to żadna z nich nie może zatrzymać się w stanie akceptującym.
+
+\subsection{Jeżeli niedeterministyczna maszyna Turinga N nie akceptuje słowa w, to N odrzuca słowo w}
+\textbf{Fałsz}. Możliwy jest przypadek, w którym wszystkie gałęzie obliczenia zapętlają się (co oznacza brak akceptacji), ale w tym przypadku maszyna nie odrzuca słowa w, bo żadna ścieżka nie weszła w stan $q_R$.
+
+\subsection{Jeżeli niedeterministyczna maszyna Turinga N nie odrzuca słowo w, to N akceptuje słowo w.}
+\textbf{Fałsz}. Możliwy jest przypadek, w którym istnieje gałąź, która zapętla się, a jednocześnie żadna gałąź nie jest akceptowana. 
+
+
+\section{Zadanie 2}
+\textbf{Język A jest rozstrzygalny wtedy i tylko wtedy, gdy istnieje niedeterministyczna maszyna Turinga N rozstrzygająca A.}
+\subsection{Kieurnek 1 ($\longrightarrow$): Język rozstrzygalny przez DTM jest rozstrzygalny przez NTM.}
+Niech A będzie językiem rozstrzygalnym przez deterministyczną maszynę Turinga M. Ponieważ DTM M jest szczególnym przypadkiem NTM to maszyna M jest również niedeterministyczną maszyną Turinga N. Skoro maszyna M zawsze się zatrzymuje, czyli rozstrzyga, to NTM N również zawsze się zatrzymuje.\\
+\textbf{Wniosek:} Jeśli A jest rozstrzygalny przez DTM, to jest rozstrzygalny przez NTM.
+
+\subsection{Kierunek 2 ($\longleftarrow$): Język rozstrzygalny przez NTM jest rozstrzygalny przez DTM.}
+Niech N będzie niedeterministyczną maszyną Turinga, która rozstrzyga język A. Oznacza to, że dla każdego słowa w, wszystkie gałęzie obliczenia N na w muszą się zatrzymać w stanie akceptującym $q_A$ lub odrzucającym $q_R$
+
+Modyfikacja DTM symulującej maszynę N:
+Maszyna D będzie symulować N, przeszukując jej drzewo obliczeń metodą przeszukiwania wszerz (BFS). Dzięki temu, D przeszuka systematycznie wszystkie możliwości, krok po kroku, poziom po poziomie.
+\begin{enumerate}
+    \item Maszyna D mapuje drzewo\\
+    D nie idzie jedną ścieżką jak w przypadku DTM, ale zapisuje na taśmie wszystkie możliwe konfiguracje (stany) maszyny N po 1 kroku, potem po 2 krokach, po 3 krokach itd.
+    \item Maszyna D szuka akceptacji:
+        \begin{itemize}
+            \item Podczas symulacji kolejnych poziomów, D sprawdza każdą nową konfigurację
+            \item Jeśli znajdzie jakąkolwiek ścieżkę, która osiągnęła stan akceptujący, to maszyna D natychmiast akceptuje i zatrzymuje się.
+        \end{itemize}
+    \item Maszyna D gwarantuje zatrzymanie: 
+    \begin{itemize}
+        \item jeśli NTM N rozstrzyga, to wiemy, że jej drzewo obliczeń jest skończone, bo nie ma nieskończonych gałęzi, wszystkie się zatrzymują.
+        \item Maszyna D będzie kontynuować przeszukiwanie BFS, aż wyczerpie wszystkie gałęzie tego skończonego drzewa.
+        \item W każdej iteracji maszyna D sprawdza, czy wszystkie gałęzie, jakie do tej pory rozważaliśmy, już się zatrzymały (albo akceptują, albo odrzucają).\\
+        Jeśli tak, oznacza to, że całe, skończone drzewo obliczeń maszyny N zostało przeszukane, ponieważ maszyna D nie znalazła akceptacji wcześniej (w Kroku 2), wszystkie te gałęzie musiały zakończyć się odrzuceniem. W tym momencie maszyna D odrzuca słowo w i zatrzymuje się.
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Wniosek:} Ponieważ drzewo obliczeń N jest skończone, D musi w końcu wyczerpać całe drzewo i podjąć decyzję (akceptacja w Kroku 2 lub odrzucenie w Kroku 3). W rezultacie, DTM D zawsze się zatrzymuje i podejmuje poprawną decyzję, co oznacza, że rozstrzyga język A.
+To dowodzi, że każda NTM, która rozstrzyga, może być zastąpiona DTM, która również rozstrzyga.
+
+\section{Zadanie 3}
+$$q_1\sqcup\sqcup\sqcup \vdash \sqcup q_2\sqcup\sqcup \vdash q_3\sqcup\sqcup\sqcup \vdash \sqcup q_4\sqcup\sqcup \vdash q_1\sqcup1\sqcup \vdash \sqcup q_21\sqcup \vdash \sqcup1q_2\sqcup \vdash$$ 
+$$\sqcup q_31\sqcup \vdash q_1\sqcup2\sqcup \vdash \sqcup q_22\sqcup \vdash \sqcup2q_2\sqcup \vdash \sqcup q_32\sqcup \vdash q_1\sqcup3\sqcup \vdash \sqcup q_23\sqcup \vdash \sqcup3q_2\sqcup \vdash$$
+$$ \sqcup q_33\sqcup \vdash q_1\sqcup11\sqcup \vdash \sqcup q_211\sqcup \vdash \sqcup1q_21\sqcup \vdash \sqcup11q_2\sqcup \vdash \sqcup1q_31\sqcup \vdash \sqcup q_112\sqcup \vdash $$
+$$q_1\sqcup12\sqcup \vdash \sqcup q_212\sqcup \vdash \sqcup1q_22\sqcup \vdash \sqcup12q_2\sqcup \vdash\sqcup1q_32\sqcup \vdash \sqcup q_113\sqcup \vdash q_1\sqcup13\sqcup \vdash  $$
+$$\sqcup q_213\sqcup \vdash \sqcup1q_23\sqcup \vdash \sqcup13q_2\sqcup \vdash \sqcup1q_33\sqcup \vdash \sqcup q_1111\sqcup \vdash ...$$
+
+\section{Zadanie 4}
+Prosty algorytm E jest błędny, ponieważ maszyna Turinga M może zapętlić się na słowie wejściowym $s_k$, które nie należy do języka. Algorytm E czeka, aż M zakończy działanie na $s_k$, to jeśli M się zapętli, algorytm E utknie na zawsze i nigdy nie przejdzie do rozpatrywania i ewentualnego drukowania słów $s_{k+1}, s_{k+2},... $, nawet jeśli należą one do języka.
+
+\section{Zadanie 5}
+Tak, istnieje enumerator, który wylicza wszystkie słowa nad danym alfabetem $\Sigma$.
+
+Uzasadnienie:\\
+Zbiór wszystkich słów nad skończonym alfabetem $\Sigma$, oznaczany jako $\Sigma$*, jest zbiorem przeliczalnym i nieskończonym.\\
+Enumerator to maszyna Turinga, która musi wydrukować każde słowo ze zbioru po skończonej liczbie kroków. Ponieważ $\Sigma$* jest przeliczalny, możemy zdefiniować porządek standardowy (najpierw według długości, a następnie alfabetycznie) i skonstruować maszynę E, która będzie systematycznie generować kolejne słowa w tym porządku. Ponieważ każde słowo ma swoje miejsce w tej nieskończonej, ale uporządkowanej sekwencji, enumerator zawsze dotrze do każdego słowa w $\in$ $\Sigma$* po skończonej liczbie kroków i je wydrukuje.
+
+\section{Zadanie 6}
+\subsection{Kierunek 1 - rozstrzygalny $\longrightarrow$ wyliczalny w porządku standardowym}
+\begin{itemize}
+    \item Jeśli język A jest rozstrzygalny przez maszynę M, to M zawsze się zatrzymuje (akceptuje lub odrzuca) dla każdego słowa
+    \item Enumerator E uruchamia M na kolejnych słowach $\Sigma$* w porządku standardowym ($\epsilon$, $s_1$, $s_2$, ...)
+    \item Ponieważ M gwarantuje zatrzymanie, E nigdy nie utknie. Testowanie każdego słowa kończy się w skończonym czasie, a E drukuje słowo tylko wtedy, gdy M akceptuje.
+\end{itemize}
+WNIOSEK: E drukuje słowa A w porządku standardowym.
+
+\subsection{Kierunek 2 - wyliczalny w porządku standardowym $\longrightarrow$ rozstrzygalny}
+\begin{itemize}
+    \item Jeśli enumerator E wylicza język A w porządku standardowym (najpierw według długości), to konstruujemy maszynę rozstrzygającą M dla wejścia w
+    \item M uruchamia E i porównuje w z każdym wydrukowanym słowem $s_i$:
+    \begin{itemize}
+        \item Jeśli $s_i$ = w to M akceptuje w i się zatrzymuje
+        \item Jeśli $|s_i|$ $>$ $|w|$ to ponieważ E działa w porządku standardowym, E wyczerpał już wszystkie krótsze słowa oraz wszystkie słowa o długości $|w|$. Skoro w nie zostało wydrukowane, to w $\notin$ A. M odrzuca w i się zatrzymuje.
+    \end{itemize}
+\end{itemize}
+WNIOSEK: M zawsze zatrzymuje się w skończonym czasie, co oznacza, że język A jest rozstrzygalny.
+
+\section{Zadanie 7}
+
+\textbf{Odpowiedź: TAK, język $A$ jest rozstrzygalny.}
+
+\begin{itemize}
+    \item Analiza języka A - wartość słowa s jest stała, choć nam nieznana. Zgodnie z definicją, język A może zawierać tylko jedno słowo:
+    $$A = \{0\} \quad \text{lub} \quad A = \{1\}$$
+    W obu przypadkach A jest językiem skończonym, ponieważ zawiera tylko jeden, ustalony ciąg (s) o stałej długości $|s|=1$.
+    \item Rozstrzygalność języków skończonych - klasa języków rozstrzygalnych jest szersza niż klasa języków skończonych. Wiadomo, że każdy język skończony jest rozstrzygalny
+    \item Konstrukcja maszyny decydującej - ponieważ język A jest skończony, zawsze można skonstruować deterministyczną maszynę Turinga M, która go rozstrzygnie.
+    \begin{itemize}
+        \item Jeżeli prawdziwe jest, że $A=\{0\}$, maszyna M akceptuje słowo "0" i odrzuca wszystkie inne słowa.
+        \item Jeżeli prawdziwe jest, że $A=\{1\}$, maszyna M akceptuje słowo "1" i odrzuca wszystkie inne słowa.
+    \end{itemize}
+    Ponieważ wiemy, że musi być prawdziwy jeden z tych dwóch przypadków, definitywnie istnieje maszyna Turinga, która zatrzyma się w skończonym czasie dla każdego wejścia i rozstrzygnie język A.
+\end{itemize}
+
+
+
+\end{document}
