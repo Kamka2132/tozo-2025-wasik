@@ -1,0 +1,223 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Zadanie 1}
+\begin{enumerate}
+    \item Tak, stan końcowy $S_0$ jest stanem akceptującym. Zatem $<B, 0100>$ $\in$ $A_{DFA}$.
+    \item Nie. Stan końcowy $S_2$ nie jest stanem akceptującym. Zatem $<B, 011>$ $\notin$ $A_{DFA}$
+    \item Nie. Elementami języka są pary kodów $<A, w>$. Kod $<B>$ jest pojedynczym słowem, czyli kodem automatu i nie pasuje do wymaganego formatu wejścia dla $A_{DFA}$.
+    \item Nie. Język $A_{REX}$ wymaga, aby pierwszym elementem pary kodowania był kod wyrażenia regularnego $<R>$. W parze $<B, 0100>$ pierwszy element $<B>$ jest kodem automatu DFA, a nie wyrażenia regularnego.
+    \item  Nie. Język nie jest pusty
+    \item Tak. Równość języka ze samym sobą jest zawsze prawdą, niezależnie od automatu.
+\end{enumerate}
+
+\section{Zadanie 2}
+Problem można wyrazić jako język $EQ_{DFA,REX}$, czyli język równoważności DFA i REX.
+
+$EQ_{DFA,REX}$ = $\{$ $<A,R>$ $|$ A jest DFA, R jest wyrażeniem regularnym oraz L(A) = L(R)$\}$
+\begin{itemize}
+    \item $<A,R>$ - kodawanie pary, składającej się z DFA A oraz wyr. reg. R
+    \item L(A) - język akceptowany przez DFA
+    \item L(R) - język generowany przez wyrażenie regularne
+\end{itemize}
+
+
+Język $EQ_{DFA,REX}$ jest rozstrzygalny, ponieważ możemy zbudować maszyne Turinga, która zawsze się zatrzyma i poda poprawną odpowiedź TAK lub NIE.
+\begin{itemize}
+    \item Mając na wejściu parę $<A,R>$ maszyna Turinga przekształca wyrażenie regularne na równoważny mu DFA ($A_R$). Jest to zawsze możliwe, ponieważ języki regularne możemy przekształcić: REX $\rightarrow$ NFA $\rightarrow$ DFA
+    \item Następnie maszyna używa algorytmu rozstrzygającego dla problemu równoważności dwóch automatów DFA ($EQ_{DFA}$), aby sprawdzić czy L(A) = L($A_R$)
+    \item Jeżeli L(A) = L($A_R$) to maszyna akceptuje
+    \item Jeżeli L(A) $\neq$ L($A_R$) to maszyna odrzuca
+\end{itemize}
+
+Ponieważ zarówno przekształcenie REX $\rightarrow$ DFA, jak i sprawdzenie równoważności dwóch DFA ($EQ_{DFA}$) są algorytmami, które zawsze się zatrzymują, cała procedura również zawsze sięzatrzymuje. Zatem problem jest rozstrzygalny.
+
+
+\section{Zadanie 3}
+\subsection{Metoda 1: Usunięcie stanów nieosiągalnych}
+
+Ta metoda opiera się na idei, że jeśli DFA akceptuje wszystkie słowa ($\Sigma$*), to żaden z jego stanów nieakceptujących nie może być osiągalny.
+
+Rozstrzygalnik $M_{ALL}$ działa w następujący sposób dla wejścia $<A>$:
+
+\begin{enumerate}
+    \item Modyfikacja DFA A
+    \begin{itemize}
+        \item tworzymy automat A', który jest taki sam jak A, ale ma zmieniony zbiór stanó akceptujących. Zbiorem stanów akceptujących A' staje się zbiów stanów nieakceptujących automatu A.
+        \item Język L(A') jest językiem słów, które nie są akceptowalne przez A. Zatem $L(A') = \overline{L(A)}$ (dopełnienie)
+        \item L(A) = $\Sigma$* wtedy i tylko wtedy, gdy $\overline{L(A)}$ = $\emptyset$. Oznacza to, że A akceptuje wszystkie słowa, gdy A' nei akceptuje żadnego .
+    \end{itemize}
+    \item uruchamiamy $E_{DFA}$ dla problemu pustości języka $E_{DFA}$ na automacie A'
+    \item Wynik
+    \begin{itemize}
+        \item jeżeli $E_{DFA}$ akceptuje A' to $M_{ALL}$ akceptuje $<A>$
+        \item jeżeli $E_{DFA}$ odrzuca A' to $M_{ALL}$ odrzuca $<A>$
+    \end{itemize}
+\end{enumerate}
+Ponieważ dopełnienie DFA i problem $E_{DFA}$ są rozstrzygalne i zawsze sięzatrzymują, $ALL_{DFA}$ też jest rozstrzygalny.
+
+\subsection{Wykorzystanie problemu równoważności ($EQ_{DFA}$) }
+
+Problem równoważności $EQ_{DFA}$ jest rozstrzygalny:
+$$EQ_{DFA} = \{\langle A_1, A_2 \rangle \mid A_1, A_2 \text{ są DFA oraz } L(A_1) = L(A_2)\}$$
+Ta metoda polega na porównaniu języka L(A) z językiem wszystkich słów $\Sigma$*, generowanym przez minimalny DFA.\\
+$M_{ALL}$ dla wejścia $<A>$ działa w następujący sposób:
+\begin{enumerate}
+    \item konstruujemy minimalny DFA $A_{\Sigma^*}$ akceptujący język  $\Sigma^{*}$:
+    \begin{itemize}
+        \item $A_{\Sigma^*}$ ma tylko jeden stan $Q_{start}$
+        \item $Q_{start}$ jest stanem akceptującym
+        \item dla każdego symbolu x $\in$ $\Sigma$, funkcja przejścia to $\delta$($Q_{start}, x$) = $Q_{start}$
+    \end{itemize}
+
+    \item uruchamiamy maszynę rozstrzygającą $R_{EQ_{DFA}}$ dla problemu $EQ_{DFA}$ na parze automatów $\langle A, A_{\Sigma^*} \rangle$. $EQ_{DFA} = \{\langle A_1, A_2 \rangle \mid  L(A_1) = L(A_2)\}$ jest rozstrzygalny.
+
+    \item wynik:
+    $$M_{ALL} \text{ akceptuje } \langle A \rangle \iff R_{EQ_{DFA}} \text{ akceptuje } \langle A, A_{\Sigma^*} \rangle$$
+    $$M_{ALL} \text{ odrzuca } \langle A \rangle \iff R_{EQ_{DFA}} \text{ odrzuca } \langle A, A_{\Sigma^*} \rangle$$
+\end{enumerate}
+Ponieważ konstrukcja $A_{\Sigma^*}$ i problem $EQ_{DFA}$ są rozstrzygalne i zawsze się zatrzymują, $M_{ALL}$ zawsze się zatrzymuje, co dowodzi, że $ALL_{DFA}$ jest rozstrzygalny.
+
+\subsection{Metoda 3: Z wykorzystaniem problemu pustości języka rozpoznawalnego ($E_{DFA}$)}
+
+Problem pustości $E_{DFA}$ jest rozstrzygalny:
+$$E_{DFA} = \{\langle A \rangle \mid A \text{ jest DFA oraz } L(A) = \emptyset\}$$
+Język $L(A)$ jest równy $\Sigma^{*}$ wtedy i tylko wtedy, gdy jego dopełnienie $\overline{L(A)}$ jest językiem pustym ($\emptyset$).\\
+
+Rozstrzygalnik $M_{ALL}$ działa w następujący sposób dla wejścia $\langle A \rangle$:
+\begin{enumerate}
+    \item dla zadanego $A=(Q, \Sigma, \delta, q_0, F)$, konstruujemy automat $\overline{A}$ dla $\overline{L(A)}$ przez zamianę stanów akceptujących na nieakceptujące i odwrotnie:
+    $$\overline{A} = (Q, \Sigma, \delta, q_0, Q \setminus F)$$
+    Wtedy $L(\overline{A}) = \overline{L(A)}$.
+
+    \item uruchamiamy maszynę dla problemu $E_{DFA}$ na automacie $\langle \overline{A} \rangle$. Rozstrzygalnik ten sprawdza, czy jakiś stan akceptujący $Q \setminus F$ jest osiągalny ze stanu startowego $q_0$.
+
+    \item wynik:
+    $$M_{ALL} \text{ akceptuje } \langle A \rangle \iff E_{DFA} \text{ akceptuje } \langle \overline{A} \rangle$$
+    $$M_{ALL} \text{ odrzuca } \langle A \rangle \iff E_{DFA} \text{ odrzuca } \langle \overline{A} \rangle$$
+
+\end{enumerate}
+Ponieważ dopełnienie DFA i problem $E_{DFA}$ są rozstrzygalne i zawsze się zatrzymują, $M_{ALL}$ zawsze się zatrzymuje, co dowodzi, że $ALL_{DFA}$ jest rozstrzygalny.
+
+\section{Zadanie 4}
+
+$$INFINITE_{DFA} = \{\langle A \rangle \mid A \text{ jest DFA oraz } L(A) \text{ jest językiem nieskończonym}\}$$
+
+$$I = \text{``Na wejściu } \langle A \rangle, \text{ gdzie } A \text{ jest DFA:''}$$
+
+\begin{enumerate}
+    \item Niech $k$ będzie liczbą stanów automatu $A$.
+    
+    \item Skonstruuj DFA $D$, który akceptuje wszystkie ciągi o długości $k$ lub większej.
+    
+    \item Skonstruuj DFA $M$ taki, że $L(M) = L(A) \cap L(D)$.
+
+    \item Przetestuj, czy $L(M) = \emptyset$ używając decydenta $T$ dla $E_{DFA}$
+
+    \item Jeśli $T$ akceptuje, odrzuć; jeśli $T$ odrzuca, akceptuj.
+    $$\text{Jeśli } T \text{ akceptuje } \langle M \rangle \quad (\text{tj. } L(M) = \emptyset), \quad M_{INF} \text{ odrzuca } \langle A \rangle.$$
+    $$\text{Jeśli } T \text{ odrzuca } \langle M \rangle \quad (\text{tj. } L(M) \neq \emptyset), \quad M_{INF} \text{ akceptuje } \langle A \rangle.$$
+\end{enumerate}
+
+
+Uzasadnienie:
+
+Ten algorytm działa, ponieważ DFA, który akceptuje nieskończenie wiele ciągów, musi akceptować ciągi o arbitralnie długiej długości. Dlatego ten algorytm akceptuje takie DFA. I odwrotnie, jeśli algorytm akceptuje DFA, to ten DFA akceptuje jakiś ciąg o długości $k$ lub większej, gdzie $k$ jest liczbą stanów DFA. Ten ciąg można ``pompować'' (zgodnie z lematem o pompowaniu dla języków regularnych), aby uzyskać nieskończenie wiele akceptowanych ciągów.
+
+\section{Zadanie 5}
+Problem $A_{\epsilon CFG}$ polega na sprawdzeniu, czy symbol startowy $S$ danej Gramatyki Bezkontekstowej $G$ może wygenerować słowo puste ($\epsilon$):
+$$A_{\epsilon CFG} = \{\langle G \rangle \mid G \text{ jest CFG i } \epsilon \in L(G)\}$$
+
+Język $A_{\epsilon CFG}$ jest \textbf{rozstrzygalny} za pomocą prostego algorytmu, który zawsze się kończy:
+
+\begin{enumerate}
+    \item Tworzymy zbiór $U$ (symboli generujących $\epsilon$). Początkowo $U$ jest pusty.
+
+    \item Powtarzamy, aż zbiór $U$ przestanie się powiększać:
+    \begin{itemize}
+        \item Dodajemy nieterminal $A$ do $U$, jeśli istnieje reguła $A \to w$ taka, że wszystkie symbole w ciągu $w$ już należą do $U$ (czyli mogą być zastąpione przez $\epsilon$).
+    \end{itemize}
+
+    \item Sprawdzamy, czy symbol startowy $S$ należy do $U$.
+    \begin{itemize}
+        \item Jeśli $S \in U$, gramatyka $G$ akceptuje $\epsilon$. $\implies$ akceptuj.
+        \item Jeśli $S \notin U$, $G$ nie akceptuje $\epsilon$. $\implies$ odrzuć.
+    \end{itemize}
+\end{enumerate}
+
+Wyjaśnienie:
+\begin{itemize}
+    \item Zbiór nieterminali $V$ jest skończony.
+    \item W każdej udanej pętli algorytm dodaje co najmniej jeden symbol do $U$.
+    \item Algorytm musi zakończyć się maksymalnie po tylu krokach, ile jest nieterminali ($|V|$), więc zawsze się zatrzymuje.
+    \item Fakt, że jest to problem rozstrzygalny dla CFG, pozwala nam później na konwersję gramatyki do Postaci Normalnej Chomsky'ego (CNF), ponieważ $A_{\epsilon CFG}$ jest pierwszym krokiem w eliminacji niepotrzebnych reguł $\epsilon$.
+\end{itemize}
+
+\section{Zadanie 6}
+
+Język $NEQ_{CFG}$ jest rozpoznawalny w sensie Turinga. Istnieje Maszyna Turinga $M_{NEQ}$, która zawsze akceptuje i zatrzymuje się dla wejść należących do $NEQ_{CFG}$.\\
+
+Maszyna $M_{NEQ}$ dla wejścia $\langle G, H \rangle$ działa w nieskończonej pętli:
+
+\begin{enumerate}
+    \item Systematycznie generuj kolejne słowa $w \in \Sigma^{*}$ (np. $\epsilon, 0, 1, 00, \dots$).
+    
+    \item Dla aktualnego słowa $w$, użyj rozstrzygalnika dla $A_{CFG}$ (Test Przynależności Słowa), aby sprawdzić:
+    \begin{itemize}
+        \item Czy $w \in L(G)$?
+        \item Czy $w \in L(H)$?
+    \end{itemize}
+
+    \item Jeśli wyniki testów są różne (słowo $w$ rozróżnia języki), to:
+    $$M_{NEQ} \text{ akceptuje } \langle G, H \rangle \text{ i ZATRZYMUJE SIĘ.}$$
+    
+    \item W przeciwnym razie, kontynuuj pętlę i testuj następne słowo.
+\end{enumerate}
+\newpage
+Wniosek:
+\begin{itemize}
+    \item Jeśli $L(G) \neq L(H)$, maszyna $M_{NEQ}$ w końcu znajdzie słowo $w$, zatrzyma się i zaakceptuje.
+    \item Jeśli $L(G) = L(H)$, maszyna $M_{NEQ}$ nigdy nie znajdzie różnicy i będzie pracowaćw nieskończoność.
+\end{itemize}
+Zatem $NEQ_{CFG}$ jest rozpoznawalny w sensie Turinga.
+
+\section{Zadanie 7}
+
+Niech $s_1, s_2, s_3, ...$ będzie listą wszystkich ciągów znaków (słów) w $\Sigma$*. Poniższa Maszyna Turinga rozpoznaje język $E_{TM}$
+
+$$I = \text{"Na wejściu } \langle M \rangle, \text{ gdzie } M \text{ jest Maszyną Turinga:''}$$
+
+\begin{enumerate}
+    \item Powtarzaj następujące kroki dla $i = 1, 2, 3, ...$
+    
+    \item Uruchom $M$ przez $i$ kroków na każdym wejściu $s_1, s_2, ..., s_i$.
+
+    \item Jeśli $M$ zaakceptowała którekolwiek z tych słów, zaakceptuj $\langle M \rangle$. W przeciwnym razie, kontynuuj.
+
+\end{enumerate}
+
+Wyjaśnienie Działania:
+\begin{itemize}
+    \item Maszyna $I$ stosuje równoległą symulację 
+    \item Jeśli $L(M) \neq \emptyset$, to musi istnieć jakieś słowo $s_k$, które jest akceptowane przez $M$ w skończonej liczbie kroków $j$.
+    \item Pętla zewnętrzna w końcu osiągnie iterację $i$ tak dużą, że $i \ge k$ (aby $s_k$ było testowane) oraz $i \ge j$ (aby symulacja miała wystarczającą liczbę kroków).
+    \item Gdy to nastąpi, maszyna $I$ znajdzie akceptujące słowo, zaakceptuje i się zatrzyma.
+\end{itemize}
+
+Jeśli $L(M) = \emptyset$, maszyna $I$ nigdy nie znajdzie akceptującego słowa i będzie wykonywała pętlę w nieskończoność. Spełnia to definicję rozpoznawalności w sensie Turinga.
+
+
+
+\end{document}
