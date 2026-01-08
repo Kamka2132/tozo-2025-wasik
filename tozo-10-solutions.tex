@@ -1,0 +1,177 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Zadanie 1}
+Dopasowanie to ciąg indeksów $i_1, i_2, \dots, i_k$ taki, że napisy na górze i na dole po złączeniu są identyczne.
+Przyjmijmy oznaczenia: $d_1 = [\frac{ab}{abab}], d_2 = [\frac{b}{a}], d_3 = [\frac{aba}{b}], d_4 = [\frac{aa}{a}]$.
+
+Ciąg indeksów: $(1, 2, 3, 1, 2, 4)$
+
+\begin{itemize}
+    \item \textbf{Góra:} $ab \cdot b \cdot aba \cdot ab \cdot b \cdot aa = abbabaabbaa$
+    \item \textbf{Dół:} $abab \cdot a \cdot b \cdot abab \cdot a \cdot a = abbabaabbaa$
+\end{itemize}
+
+Dopasowanie zostało znalezione, ponieważ oba napisy są identyczne.
+
+\section{Zadanie 2}
+W alfabecie unarnym każde domino $i$ można opisać parą liczb $(g_i, d_i)$, 
+gdzie $g_i$ to liczba jedynek na górze, a $d_i$ na dole.
+Dopasowanie istnieje, gdy $\sum g_{i_k} = \sum d_{i_k}$, czyli $\sum (g_{i_k} - d_{i_k}) = 0$.
+
+Algorytm rozstrzygający:\\
+1. Jeśli istnieje domino, w którym $g_i = d_i$, zaakceptuj (dopasowanie jednoelementowe).\\
+2. Jeśli istnieje domino $i$, gdzie $g_i > d_i$ ORAZ domino $j$, gdzie $g_j < d_j$, zaakceptuj. \\
+   Możemy dobrać odpowiednią liczbę domina $i$ i $j$, aby różnice się wyzerowały 
+   (rozwiązanie równania $n \cdot (g_i - d_i) + m \cdot (g_j - d_j) = 0$).\\
+3. W przeciwnym razie odrzuć.
+
+Skoro algorytm zawsze się kończy, problem jest rozstrzygalny.
+
+\section{Zadanie 3}
+\textbf{Dowód (przez redukcję)}\\
+Wiemy, że język $ALL_{CFG} = \{ \langle G \rangle \mid L(G) = \Sigma^* \}$ jest nierozstrzygalny.
+
+Redukujemy $ALL_{CFG}$ do $EQ_{CFG}$.\\
+Załóżmy, że istnieje maszyna $R$ rozstrzygająca $EQ_{CFG}$. 
+
+Budujemy maszynę $S$ rozstrzygającą $ALL_{CFG}$:\\
+$S = $ "Na wejściu $\langle G \rangle$:\\
+1. Skonstruuj gramatykę $G_{all}$, która generuje wszystkie słowa nad $\Sigma$ (język regularny $\Sigma^*$).\\
+2. Uruchom $R$ na wejściu $\langle G, G_{all} \rangle$.\\
+3. Jeśli $R$ akceptuje, zaakceptuj. Jeśli $R$ odrzuca, odrzuć."
+
+Ponieważ $ALL_{CFG}$ jest nierozstrzygalny, $EQ_{CFG}$ również musi być nierozstrzygalny.
+
+\section{Zadanie 4}
+Z definicji redukcji $A \le_m B$ istnieje obliczalna funkcja $f$ taka, że:
+
+$w \in A \iff f(w) \in B$.
+
+Z zasad logiki (prawo kontrapozycji i definicja dopełnienia):\\
+$w \notin A \iff f(w) \notin B$, 
+
+co jest równoważne:\\
+$w \in \overline{A} \iff f(w) \in \overline{B}$.
+
+Ta sama funkcja $f$ świadczy o tym, że $\overline{A} \le_m \overline{B}$.
+
+\section{Zadanie 5}
+
+\textbf{Odpowiedź: Nie}
+
+Funkcja redukująca $f$ jest funkcją \textit{obliczalną}, co oznacza, że może być wykonana przez potężną Maszynę Turinga. 
+
+Niech $A = \{0^n 1^n \mid n \ge 0\}$ (język bezkontekstowy, nieregularny) \\
+a $B = \{1\}$ (język regularny).
+
+Możemy zdefiniować funkcję $f(w)$:\\
+$f(w) = 1$, jeśli $w \in A$, \\
+oraz $f(w) = 0$, jeśli $w \notin A$.
+
+Funkcja ta jest obliczalna, bo Maszyna Turinga może sprawdzić, czy słowo należy do $A$. 
+
+Zatem $A \le_m B$, mimo że $A$ nie jest regularny.
+
+\section{Zadanie 6}
+Niech $s_1, s_2, \dots$ będzie listą wszystkich ciągów w $\Sigma^*$. 
+Poniższa maszyna Turinga (TM) rozpoznaje język $\overline{E_{\text{TM}}}$.
+
+\begin{quote}
+„Na wejściu $\langle M \rangle$, gdzie $M$ jest maszyną Turinga:
+\begin{enumerate}
+    \item Powtarzaj poniższe kroki dla $i = 1, 2, 3, \dots$
+    \item Uruchom $M$ na $i$ kroków dla każdego ciągu wejściowego $s_1, s_2, \dots, s_i$.
+    \item Jeśli $M$ zaakceptowała którykolwiek z nich, \textit{zaakceptuj}. W przeciwnym razie kontynuuj.”
+\end{enumerate}
+\end{quote}
+
+
+\section{Zadanie 7}
+Przypuśćmy nie wprost, że $A_{\text{TM}} \leq_{\text{m}} E_{\text{TM}}$ 
+poprzez redukcję $f$. Z definicji redukowalności wyznaczalnej wynika, że 
+$\overline{A_{\text{TM}}} \leq_{\text{m}} \overline{E_{\text{TM}}}$ poprzez tę samą 
+funkcję redukcji $f$. Jednakże, $\overline{E_{\text{TM}}}$ jest rozpoznawalny 
+w sensie Turinga (patrz rozwiązanie zadania 6), a $\overline{A_{\text{TM}}}$ 
+nie jest rozpoznawalny w sensie Turinga, co stoi w sprzeczności z Twierdzeniem Rice'a.
+
+\section{Zadanie 8}
+Załóżmy, że $A \leq_{\text{m}} B$ oraz $B \leq_{\text{m}} C$. Wówczas 
+istnieją funkcje obliczalne $f$ i $g$ takie, że $x \in A \iff f(x) \in B$ oraz 
+$y \in B \iff g(y) \in C$. 
+
+Rozważmy złożenie funkcji $h(x) = g(f(x))$. \\
+Możemy skonstruować maszynę Turinga, która oblicza $h$ w następujący sposób: \\
+- najpierw symuluj maszynę Turinga dla $f$ na wejściu $x$ i nazwij wynik $y$. \\
+- następnie symuluj maszynę Turinga dla $g$ na wejściu $y$. 
+
+Wynikiem jest :\\
+$h(x) = g(f(x))$. Zatem $h$ jest funkcją obliczalną. Co więcej, 
+$x \in A \iff h(x) \in C$. 
+
+Stąd $A \leq_{\text{m}} C$ poprzez funkcję redukcji $h$.
+
+\section{Zadanie 9}
+Załóżmy, że $A \leq_{\text{m}} \overline{A}$. \\
+Wtedy :\\
+$\overline{A} \leq_{\text{m}} A$ poprzez tę samą redukcję wyznaczalną. 
+
+Ponieważ $A$ jest rozpoznawalny w sensie Turinga, Twierdzenie Rice'a implikuje, 
+że $\overline{A}$ jest rozpoznawalny w sensie Turinga, a następnie 
+Twierdzenie 4.22 implikuje, że $A$ jest rozstrzygalny.
+
+\textbf{TWIERDZENIE 4.22} \\
+Język jest rozstrzygalny wtedy i tylko wtedy, gdy jest rozpoznawalny 
+w sensie Turinga i jego dopełnienie jest rozpoznawalne w sensie Turinga.
+
+\section{Zadanie 10}
+Aby udowodnić równoważność, musimy wykazać dwie implikacje:
+
+1) $(\Rightarrow)$ Załóżmy, że $A$ jest rozpoznawalny przez Maszynę Turinga $M_A$. Definiujemy funkcję redukcji $f(w) = \langle M_A, w \rangle$.
+\begin{itemize}
+    \item Funkcja $f$ jest obliczalna (wystarczy dopisać stały kod maszyny $M_A$ przed słowem $w$).
+    \item Zachodzi warunek: $w \in A \iff \langle M_A, w \rangle \in A_{TM}$. Jeśli $w \in A$, to $M_A$ akceptuje $w$, więc para należy do $A_{TM}$.
+\end{itemize}
+
+2) $(\Leftarrow)$ Załóżmy, że $A \le_m A_{TM}$. Wiemy, że język $A_{TM}$ jest rozpoznawalny (przez uniwersalną maszynę Turinga). Ponieważ klasa języków rozpoznawalnych jest zamknięta na redukcje przez odwzorowanie, język $A$ również musi być rozpoznawalny.
+
+\section{Zadanie 11}
+($\Leftarrow$) Jeśli $A \le_m 0^*1^*$, to ponieważ $0^*1^*$ jest językiem regularnym (więc rozstrzygalnym), 
+a języki rozstrzygalne są zamknięte na redukcje, $A$ musi być rozstrzygalny.
+
+($\Rightarrow$) Jeśli $A$ jest rozstrzygalny, to istnieje maszyna decydująca $M$. 
+Definiujemy funkcję redukcji $f(w)$:\\
+- Uruchom $M$ na $w$.\\
+- Jeśli $M$ zaakceptuje, zwróć słowo $01$ (należy do $0^*1^*$).\\
+- Jeśli $M$ odrzuci, zwróć słowo $10$ (nie należy do $0^*1^*$).\\
+Funkcja $f$ jest obliczalna i poprawnie redukuje $A$ do $0^*1^*$.
+
+\section{Zadanie 12}
+Skoro $B \neq \emptyset$ i $B \neq \Sigma^*$, to istnieje co najmniej jedno słowo $b_{tak} \in B$ oraz co najmniej jedno słowo $b_{nie} \notin B$.
+
+Konstruujemy funkcję $f(w)$:\\
+1. Przetestuj, czy $w \in A$ (możemy to zrobić, bo $A$ jest rozstrzygalny).\\
+2. Jeśli $w \in A$, zwróć $b_{tak}$.\\
+3. Jeśli $w \notin A$, zwróć $b_{nie}$.\\
+
+Ponieważ $w \in A \iff f(w) \in B$, funkcja $f$ jest poprawną redukcją.
+
+
+
+
+
+
+
+\end{document}
