@@ -1,0 +1,186 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Teoria obliczeń i złożoność obliczeniowa 2025}
+\author{Kamila Wasik}
+\date{October 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Zadanie 1}
+Aby wykazać, że $f(n) = o(g(n))$, należy sprawdzić, czy spełniony jest warunek:
+\[ \lim_{n \to \infty} \frac{f(n)}{g(n)} = 0 \]
+
+\begin{enumerate}
+    \item[(a)] $\sqrt{n} = o(n)$
+    \begin{align*}
+        \lim_{n \to \infty} \frac{\sqrt{n}}{n} &= \lim_{n \to \infty} \frac{n^{1/2}}{n^1} \\
+        &= \lim_{n \to \infty} n^{1/2 - 1} \\
+        &= \lim_{n \to \infty} \frac{1}{\sqrt{n}} = 0
+    \end{align*}
+
+    \item[(b)] $n = o(n \cdot \log \log n)$
+    \begin{align*}
+        \lim_{n \to \infty} \frac{n}{n \cdot \log \log n} &= \lim_{n \to \infty} \frac{1}{\log \log n} = 0
+    \end{align*}
+    Gdy $n \to \infty$, to $\log \log n \to \infty$, więc odwrotność dąży do 0.
+
+    \item[(c)] $n \cdot \log \log n = o(n \cdot \log n)$
+    \begin{align*}
+        \lim_{n \to \infty} \frac{n \cdot \log \log n}{n \cdot \log n} &= \lim_{n \to \infty} \frac{\log \log n}{\log n}
+    \end{align*}
+    Podstawiając $u = \log n$ (gdzie $u \to \infty$ gdy $n \to \infty$):
+    \begin{align*}
+        \lim_{u \to \infty} \frac{\log u}{u} = 0
+    \end{align*}
+
+    \item[(d)] $n \cdot \log n = o(n^2)$
+    \begin{align*}
+        \lim_{n \to \infty} \frac{n \cdot \log n}{n^2} &= \lim_{n \to \infty} \frac{\log n}{n} = 0
+    \end{align*}
+
+    \item[(e)] $n^2 = o(n^3)$
+    \begin{align*}
+        \lim_{n \to \infty} \frac{n^2}{n^3} &= \lim_{n \to \infty} \frac{1}{n} = 0
+    \end{align*}
+\end{enumerate}
+
+\section{Zadanie 2}
+
+Zgodnie z definicją notacji małego $o$, dla dwóch funkcji $f(n)$ oraz $g(n)$, zapis $f(n) = o(g(n))$ oznacza, że:
+\[ \lim_{n \to \infty} \frac{f(n)}{g(n)} = 0 \]
+
+W przypadku, gdy podstawimy $g(n) = f(n)$, otrzymujemy iloraz:
+\[ \frac{f(n)}{f(n)} \]
+
+Ponieważ z treści zadania wiemy, że dziedziną wartości funkcji są liczby rzeczywiste dodatnie ($f: \mathbb{N} \to \mathbb{R}^+$), to dla każdego $n \in \mathbb{N}$ zachodzi $f(n) > 0$. Dzięki temu możemy wykonać dzielenie:
+\[ \forall n \in \mathbb{N}: \quad \frac{f(n)}{f(n)} = 1 \]
+
+Obliczamy granicę tego ilorazu przy $n \to \infty$:
+\[ \lim_{n \to \infty} \frac{f(n)}{f(n)} = \lim_{n \to \infty} 1 = 1 \]
+
+Ponieważ wynik granicy wynosi $1$, a definicja małego $o$ wymaga, aby granica wynosiła $0$, zachodzi sprzeczność:
+\[ 1 \neq 0 \]
+
+\textbf{Wniosek:} Równość $f(n) = o(f(n))$ nie może zachodzić dla żadnej funkcji o wartościach dodatnich, ponieważ funkcja nie może rosnąć asymptotycznie szybciej niż ona sama.
+
+\section{Zadanie 3}
+
+\begin{itemize}
+    \item[(a)] $2n = O(n)$ \\
+    \textbf{PRAWDA}. Istnieje stała $c=2$ oraz $n_0=1$, taka że $2n \le 2 \cdot n$ dla wszystkich $n \ge n_0$.
+    
+    \item[(b)] $n^2 = O(n)$ \\
+    \textbf{FAŁSZ}. Funkcja $n^2$ rośnie szybciej niż liniowa. Granica $\lim_{n \to \infty} \frac{n^2}{n} = \infty$, co wyklucza ograniczenie górne przez stałą.
+    
+    \item[(c)] $n^2 = O(n \log^2 n)$ \\
+    \textbf{FAŁSZ}. Logarytm rośnie wolniej niż jakakolwiek potęga dodatnia $n^\epsilon$. Zatem $n^2$ dominuje nad $n \log^2 n$ (ponieważ po skróceniu $n$ otrzymujemy porównanie $n$ vs $\log^2 n$).
+    
+    \item[(d)] $n \log n = O(n^2)$ \\
+    \textbf{PRAWDA}. Ponieważ $\log n \le n$, to $n \log n \le n^2$ dla dostatecznie dużych $n$.
+    
+    \item[(e)] $3^n = 2^{O(n)}$ \\
+    \textbf{PRAWDA}. Możemy zapisać $3^n$ jako $2^{\log_2(3^n)} = 2^{n \log_2 3}$. Ponieważ $\log_2 3$ jest stałą, to $n \log_2 3$ jest klasy $O(n)$, więc $3^n = 2^{O(n)}$.
+    
+    \item[(f)] $2^{2n} = O(2^{2n})$ \\
+    \textbf{PRAWDA}. Każda funkcja jest klasy $O$ od samej siebie (stała $c=1$).
+\end{itemize}
+
+\section{Zadanie 4}
+\begin{itemize}
+    \item[(a)] $n = o(2n)$ \\ \textbf{FAŁSZ}. Granica $\lim_{n \to \infty} \frac{n}{2n} = \frac{1}{2} \neq 0$. To jest relacja $\Theta(n)$, nie $o(n)$.
+    \item[(b)] $2n = o(n^2)$ \\ \textbf{PRAWDA}. $\lim_{n \to \infty} \frac{2n}{n^2} = \lim_{n \to \infty} \frac{2}{n} = 0$.
+    \item[(c)] $2n = o(3^n)$ \\ \textbf{PRAWDA}. Funkcja wykładnicza rośnie znacznie szybciej niż liniowa ($\lim_{n \to \infty} \frac{2n}{3^n} = 0$).
+    \item[(d)] $1 = o(n)$ \\ \textbf{PRAWDA}. $\lim_{n \to \infty} \frac{1}{n} = 0$. Funkcja stała rośnie wolniej niż liniowa.
+    \item[(e)] $n = o(\log n)$ \\ \textbf{FAŁSZ}. To $\log n$ rośnie wolniej niż $n$ ($\log n = o(n)$). Tutaj granica wynosi $\infty$.
+    \item[(f)] $1 = o(\frac{1}{n})$ \\ \textbf{FAŁSZ}. $\lim_{n \to \infty} \frac{1}{1/n} = \lim_{n \to \infty} n = \infty$. Prawda byłaby odwrotna: $\frac{1}{n} = o(1)$.
+\end{itemize}
+
+\section{Zadanie 5}
+
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+$f(n)$ & 1 sekunda & 1 minuta & 1 godzina & 1 dzień & 1 rok \\ \hline
+$\log_2 n$ & $2^{10^6}$ & $2^{6 \cdot 10^7}$ & $2^{3.6 \cdot 10^9}$ & $2^{8.6 \cdot 10^{10}}$ & $2^{3.1 \cdot 10^{13}}$ \\ \hline
+$\sqrt{n}$ & $10^{12}$ & $3.6 \cdot 10^{15}$ & $1.3 \cdot 10^{19}$ & $7.4 \cdot 10^{21}$ & $9.9 \cdot 10^{26}$ \\ \hline
+$n$ & $10^6$ & $6 \cdot 10^7$ & $3.6 \cdot 10^9$ & $8.6 \cdot 10^{10}$ & $3.1 \cdot 10^{13}$ \\ \hline
+$n^2$ & $1000$ & $7745$ & $60000$ & $293938$ & $5615692$ \\ \hline
+$2^n$ & $19$ & $25$ & $31$ & $36$ & $44$ \\ \hline
+$n!$ & $9$ & $11$ & $12$ & $13$ & $16$ \\ \hline
+\end{tabular}
+
+Przyjmujemy jednostki czasu w mikrosekundach ($T$):
+\begin{itemize}
+    \item 1 sekunda ($s$) = $10^6 \, \mu s$
+    \item 1 minuta ($min$) = $60 \cdot 10^6 = 6 \cdot 10^7 \, \mu s$
+    \item 1 godzina ($h$) = $3600 \cdot 10^6 = 3.6 \cdot 10^9 \, \mu s$
+    \item 1 dzień ($d$) = $24 \cdot 3.6 \cdot 10^9 = 8.64 \cdot 10^{10} \, \mu s$
+    \item 1 rok ($y$) = $365 \cdot 8.64 \cdot 10^{10} \approx 3.15 \cdot 10^{13} \, \mu s$
+\end{itemize}
+
+Rozwiązujemy równanie $f(n) = T$ dla każdej funkcji:
+
+\subsection*{1. $f(n) = \log_2 n$}
+\[ \log_2 n = T \implies n = 2^T \]
+Dla $T = 10^6$, $n = 2^{10^6}$. Wartości te są ogromne, dlatego zapisujemy je w postaci potęgowej.
+
+\subsection*{2. $f(n) = \sqrt{n}$}
+\[ \sqrt{n} = T \implies n = T^2 \]
+\begin{itemize}
+    \item 1s: $(10^6)^2 = 10^{12}$
+    \item 1 min: $(6 \cdot 10^7)^2 = 3.6 \cdot 10^{15}$
+\end{itemize}
+
+\subsection*{3. $f(n) = n$}
+\[ n = T \]
+Wartości $n$ są równe liczbie mikrosekund w danym przedziale czasowym.
+
+\subsection*{4. $f(n) = n \log_2 n$}
+To równanie rozwiązujemy numerycznie. Przybliżone wartości:
+\begin{itemize}
+    \item 1s: $n \approx 62\,746$
+    \item 1 min: $n \approx 2.8 \cdot 10^6$
+\end{itemize}
+
+\subsection*{5. $f(n) = n^2$}
+\[ n = \sqrt{T} \]
+\begin{itemize}
+    \item 1s: $\sqrt{10^6} = 1000$
+    \item 1h: $\sqrt{3.6 \cdot 10^9} = 60\,000$
+\end{itemize}
+
+\subsection*{6. $f(n) = 2^n$}
+\[ n = \log_2 T \]
+\begin{itemize}
+    \item 1s: $\log_2(10^6) \approx 19.93 \implies n = 19$
+    \item 1 min: $\log_2(6 \cdot 10^7) \approx 25.8 \implies n = 25$
+\end{itemize}
+
+\subsection*{7. $f(n) = n!$}
+Szukamy największego $n$ takiego, że $n! \le T$:
+\begin{itemize}
+    \item 1s: $9! = 362\,880$, $10! = 3\,628\,800$. Zatem $n = 9$.
+    \item 1 min: $11! \approx 3.99 \cdot 10^7$, $12! \approx 4.79 \cdot 10^8$. Zatem $n = 11$.
+\end{itemize}
+
+\section{Zadanie 6}
+
+Z definicji notacji $O$:
+\begin{enumerate}
+    \item $f(n) \in O(g(n) \cdot h_1(n)) \implies \exists c_1, n_1 : \forall n \ge n_1, \quad f(n) \le c_1 \cdot g(n) \cdot h_1(n)$
+    \item $h_1(n) \in O(h(n)) \implies \exists c_2, n_2 : \forall n \ge n_2, \quad h_1(n) \le c_2 \cdot h(n)$
+\end{enumerate}
+Dla $n \ge \max(n_1, n_2)$ możemy podstawić nierówność (2) do (1):
+\[ f(n) \le c_1 \cdot g(n) \cdot (c_2 \cdot h(n)) \]
+\[ f(n) \le (c_1 \cdot c_2) \cdot (g(n) \cdot h(n)) \]
+Niech $C = c_1 \cdot c_2$ oraz $N = \max(n_1, n_2)$. Istnieje zatem stała $C$ i próg $N$, takie że:
+\[ f(n) \le C \cdot (g(n) \cdot h(n)) \quad \text{dla wszystkich } n \ge N \]
+Z definicji wynika zatem, że $f(n) \in O(g(n) \cdot h(n))$.
+
+\end{document}
