@@ -1,0 +1,498 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\title{Teoria obliczeń i złożoność obliczeniowa}
+\author{Kamila Wasik}
+\date{Październik 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Maszyny Turinga}
+
+\section{Zadanie 1}
+
+\subsection*{1a) $L = \{w \in \{0, 1\}^* \mid w \text{ kończy się jedynką}\}$}
+
+\textbf{Opis formalny maszyny $M_a$:} \\
+Maszyna Turinga $M_a$ jest zdefiniowana jako krotka:
+$M_a = (Q, \Sigma, \Gamma, \delta, q_0, q_A, q_R)$
+
+\begin{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{0, 1\}$
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{0, 1, \sqcup\}$
+    \item \textbf{Zbiór Stanów ($Q$):} $Q = \{q_0, q_1, q_A, q_R\}$
+\end{itemize}
+
+\textbf{Metoda Działania:}
+\begin{enumerate}
+    \item Maszyna startuje w stanie $q_0$ i przesuwa głowicę w prawo przez wszystkie symbole $0$ i $1$.
+    \item Po znalezieniu symbolu $\sqcup$ (koniec słowa), maszyna przechodzi do stanu $q_1$ i cofa głowicę o jedną pozycję w lewo.
+    \item Jeśli odczytany symbol to $1$, maszyna przechodzi do stanu akceptującego $q_A$.
+    \item Jeśli odczytany symbol to $0$ lub jeśli taśma była pusta ($\sqcup$), maszyna przechodzi do stanu odrzucającego $q_R$.
+\end{enumerate}
+
+\hrule
+\vspace{0.5cm}
+
+\subsection*{1b) $L = \{w \in \{0, 1\}^* \mid w \text{ zaczyna i kończy się jedynką}\}$}
+
+\textbf{Opis formalny maszyny $M_b$:} \\
+$M_b = (Q, \Sigma, \Gamma, \delta, q_0, q_1, q_2, q_A, q_R)$
+
+\begin{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{0, 1\}$
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{0, 1, \sqcup\}$
+    \item \textbf{Zbiór Stanów ($Q$):} $Q = \{q_0, q_1, q_2, q_A, q_R\}$
+\end{itemize}
+
+\textbf{Metoda Działania:}
+\begin{enumerate}
+    \item W stanie $q_0$ maszyna sprawdza pierwszy symbol. Jeśli to $1$, przechodzi do $q_1$ i idzie w prawo. Jeśli to $0$ lub $\sqcup$, przechodzi do $q_R$.
+    \item W stanie $q_1$ przesuwa się w prawo aż do napotkania symbolu pustego $\sqcup$.
+    \item Po znalezieniu $\sqcup$ przechodzi do $q_2$ i cofa głowicę w lewo o jedną pozycję.
+    \item Jeśli w $q_2$ odczyta $1$, przechodzi do $q_A$. W przeciwnym razie (symbol $0$) przechodzi do $q_R$.
+\end{enumerate}
+
+\hrule
+\vspace{0.5cm}
+
+\subsection*{1c) $L = \{w \in \{0, 1\}^* \mid w \text{ zaczyna i kończy się tym samym symbolem}\}$}
+
+\textbf{Opis formalny maszyny $M_c$:} \\
+$M_c = (Q, \Sigma, \Gamma, \delta, q_0, q_{0R}, q_{1R}, q_{0C}, q_{1C}, q_A, q_R)$
+
+\begin{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{0, 1\}$
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{0, 1, \sqcup\}$
+    \item \textbf{Zbiór Stanów ($Q$):} Stany pamiętające początek ($q_{0R}, q_{1R}$) oraz sprawdzające koniec ($q_{0C}, q_{1C}$).
+\end{itemize}
+
+\textbf{Metoda Działania:}
+\begin{enumerate}
+    \item W stanie $q_0$ czyta pierwszy symbol. Jeśli to $0$, idzie do $q_{0R}$; jeśli $1$, idzie do $q_{1R}$. Jeśli $\sqcup$ (puste słowo), przechodzi do $q_R$.
+    \item W stanach $q_{0R}$ lub $q_{1R}$ przesuwa się w prawo do końca słowa ($\sqcup$).
+    \item Po napotkaniu $\sqcup$ cofa się o jeden krok i przechodzi do stanu $q_{0C}$ (jeśli zaczęło się od $0$) lub $q_{1C}$ (jeśli od $1$).
+    \item Jeśli symbol pod głowicą zgadza się z zapamiętanym na początku – przechodzi do $q_A$. W przeciwnym razie – $q_R$.
+\end{enumerate}
+
+\hrule
+\vspace{0.5cm}
+
+\subsection*{1d) $L = \{w \in \{0, 1\}^* \mid w \text{ zawiera jednakową liczbę zer i jedynek}\}$}
+
+\textbf{Opis formalny maszyny $M_d$:} \\
+$M_d = (Q, \Sigma, \Gamma, \delta, q_0, q_1, q_2, q_3, q_A, q_R)$
+
+\begin{itemize}
+    \item \textbf{Alfabet Wejściowy ($\Sigma$):} $\Sigma = \{0, 1\}$
+    \item \textbf{Alfabet Taśmowy ($\Gamma$):} $\Gamma = \{0, 1, X, \sqcup\}$
+    \item \textbf{Zbiór Stanów ($Q$):} $Q$ zawiera stany $q_0, q_1, q_2, q_3, q_A, q_R$.
+\end{itemize}
+
+\textbf{Metoda Działania:}
+\begin{enumerate}
+    \item Maszyna skanuje taśmę w poszukiwaniu pierwszego nieoznaczonego symbolu ($0$ lub $1$).
+    \item Jeśli znajdzie $0$, oznacza je jako $X$, przechodzi do stanu $q_1$ (szukanie $1$) i idzie w prawo.
+    \item Jeśli znajdzie $1$, oznacza je jako $X$, przechodzi do stanu $q_2$ (szukanie $0$) i idzie w prawo.
+    \item Po znalezieniu pary, cofa głowicę na początek słowa ($q_3$) i powtarza proces.
+    \item Jeśli podczas skanowania z $q_0$ napotka $\sqcup$ (wszystkie sparowane), przechodzi do $q_A$. Jeśli nie może znaleźć symbolu do pary, przechodzi do $q_R$.
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Zadanie 2}
+\subsection{A = $\{$ w $|$ w zawiera jednakową liczbę 0 i 1$\}$}
+\begin{enumerate}
+    \item Pętla - maszyna powtarza swoją czynnośc dopóki nie przekreśli wszystkich symboli 0 i 1. Czyli skanuje taśmę, znajduje pierwsze nieprzekreślone 0 lub 1 i skreśla je.
+    \item Decyzja - akceptuje, jeżeli po zakończeniu pętli wszystkie symbole na taśmie zostały skreślone (sparowane); odrzuca, jeżeli na taśmie pozostał jakikolwiek symbol 0 lub 1.
+\end{enumerate}
+
+\subsection{B = $\{$ w $|$ w zawiera dwa razy większą liczbę 0 niż 1$\}$}
+
+$M_B$ musi sparować każdą 1 z dwoma 0. Aby tego dokonać używamy dwóch rodzajów przekreśleń dla 0.
+\begin{enumerate}
+    \item Pętla - powtarzaj dopóki są nieprzekreślone 1. \\Znajdź nieprzekreśloną 1 i zastąp symbolem z. Znajdź nieprzekreślone 0 i zastąp je x. Znajdź drugie nieprzekreślone 0 i zastąp je y. Odrzuć jeżeli brakuje 0 do skreślenia.
+    \item Decyzja - akceptuje, jeżeli po zakończeniu pętli wszystkie symbole na taśmie są symbolami przekreślenia; odrzuca, jeżeli pozostał jakikolwiek nieprzekreślony symbol 0 lub odrzucono na etapie pętli.
+\end{enumerate}
+
+\subsection{C = $\{$ w $|$ w nie zawiera dwa razy większą liczbę 0 niż 1$\}$}
+
+Język C jest dopełnieniem języka B. Ponieważ B jest rozstrzygalny przez $M_B$, C również jest rozstrzygalny.
+
+\begin{enumerate}
+    \item Pętla - powtarzaj dopóki są nieprzekreślone 1. \\Znajdź nieprzekreśloną 1 i zastąp symbolem z. Znajdź nieprzekreślone 0 i zastąp je x. Znajdź drugie nieprzekreślone 0 i zastąp je y. Odrzuć jeżeli brakuje 0 do skreślenia.
+    \item odwrócenie decyzji - jeżeli symulacja $M_B$ akceptuje to $M_C$ odrzuca; jeżeli $M_B$ odrzuca to $M_C$ akceptuje.
+\end{enumerate}
+
+\section*{Rozstrzygalność}
+\setcounter{section}{0}
+\section{Zadanie 1}
+Problem można wyrazić jako język $EQ_{DFA,REX}$, czyli język równoważności DFA i REX.
+
+$EQ_{DFA,REX}$ = $\{$ $<A,R>$ $|$ A jest DFA, R jest wyrażeniem regularnym oraz L(A) = L(R)$\}$
+\begin{itemize}
+    \item $<A,R>$ - kodawanie pary, składającej się z DFA A oraz wyr. reg. R
+    \item L(A) - język akceptowany przez DFA
+    \item L(R) - język generowany przez wyrażenie regularne
+\end{itemize}
+
+
+Język $EQ_{DFA,REX}$ jest rozstrzygalny, ponieważ możemy zbudować maszyne Turinga, która zawsze się zatrzyma i poda poprawną odpowiedź TAK lub NIE.
+\begin{itemize}
+    \item Mając na wejściu parę $<A,R>$ maszyna Turinga przekształca wyrażenie regularne na równoważny mu DFA ($A_R$). Jest to zawsze możliwe, ponieważ języki regularne możemy przekształcić: REX $\rightarrow$ NFA $\rightarrow$ DFA
+    \item Następnie maszyna używa algorytmu rozstrzygającego dla problemu ($EQ_{DFA}$), aby sprawdzić czy L(A) = L($A_R$)
+    \item Jeżeli L(A) = L($A_R$) to maszyna akceptuje
+    \item Jeżeli L(A) $\neq$ L($A_R$) to maszyna odrzuca
+\end{itemize}
+
+Ponieważ zarówno przekształcenie REX $\rightarrow$ DFA, jak i sprawdzenie równoważności dwóch DFA ($EQ_{DFA}$) są algorytmami, które zawsze się zatrzymują, cała procedura również zawsze sięzatrzymuje. Zatem problem jest rozstrzygalny.
+\section{Zadanie 2}
+Jeśli DFA akceptuje wszystkie słowa ($\Sigma$*), to żaden z jego stanów nieakceptujących nie może być osiągalny.
+
+Rozstrzygalnik $M_{ALL}$ działa w następujący sposób dla wejścia $<A>$:
+
+\begin{enumerate}
+    \item Modyfikacja $DFA_A$
+    \begin{itemize}
+        \item tworzymy automat A', którego zbiorem stanów akceptujących jest zbiór stanów nieakceptujących automatu A
+        \item Język L(A') jest językiem słów, które nie są akceptowalne przez A. Zatem $L(A') = \overline{L(A)}$ (dopełnienie)
+        \item L(A) = $\Sigma$* wtedy i tylko wtedy, gdy $\overline{L(A)}$ = $\emptyset$. Oznacza to, że A akceptuje wszystkie słowa, gdy A' nei akceptuje żadnego .
+    \end{itemize}
+    \item uruchamiamy $E_{DFA}$ dla problemu pustości języka $E_{DFA}$ na automacie A'
+    \item Wynik
+    \begin{itemize}
+        \item jeżeli $E_{DFA}$ akceptuje A' to $M_{ALL}$ akceptuje $<A>$
+        \item jeżeli $E_{DFA}$ odrzuca A' to $M_{ALL}$ odrzuca $<A>$
+    \end{itemize}
+\end{enumerate}
+Ponieważ dopełnienie DFA i problem $E_{DFA}$ są rozstrzygalne i zawsze sięzatrzymują, $ALL_{DFA}$ też jest rozstrzygalny.
+
+\section{Zadanie 3}
+
+Niech $s_1, s_2, s_3, ...$ będzie listą wszystkich ciągów znaków (słów) w $\Sigma$*. Poniższa Maszyna Turinga rozpoznaje język $\overline{E_{TM}}$
+
+$$I = \text{"Na wejściu } \langle M \rangle, \text{ gdzie } M \text{ jest Maszyną Turinga:''}$$
+
+\begin{enumerate}
+    \item Powtarzaj następujące kroki dla $i = 1, 2, 3, ...$
+    
+    \item Uruchom $M$ przez $i$ kroków na każdym wejściu $s_1, s_2, ..., s_i$.
+
+    \item Jeśli $M$ zaakceptowała którekolwiek z tych słów, zaakceptuj $\langle M \rangle$. W przeciwnym razie, kontynuuj.
+
+\end{enumerate}
+
+\section{Zadanie 4}
+$$INFINITE_{DFA} = \{\langle A \rangle \mid A \text{ jest DFA oraz } L(A) \text{ jest językiem nieskończonym}\}$$
+
+$$I = \text{``Na wejściu } \langle A \rangle, \text{ gdzie } A \text{ jest DFA:''}$$
+
+\begin{enumerate}
+    \item Niech $k$ będzie liczbą stanów automatu $A$.
+    
+    \item Skonstruuj DFA $D$, który akceptuje wszystkie ciągi o długości $k$ lub większej.
+    
+    \item Skonstruuj DFA $M$ taki, że $L(M) = L(A) \cap L(D)$.
+
+    \item Przetestuj, czy $L(M) = \emptyset$ używając decydenta $T$ dla $E_{DFA}$
+
+    \item Jeśli $T$ akceptuje, odrzuć; jeśli $T$ odrzuca, akceptuj.
+
+\end{enumerate}
+
+
+Uzasadnienie:
+
+Jeśli algorytm akceptuje DFA, to ten DFA akceptuje jakiś ciąg o długości $k$ lub większej, gdzie $k$ jest liczbą stanów DFA. Ten ciąg można ``pompować'' (zgodnie z lematem o pompowaniu dla języków regularnych), aby uzyskać nieskończenie wiele akceptowanych ciągów.
+
+\section{Zadanie 5 }
+Aby wykazać, że język $K$ jest rozstrzygalny, skonstruujemy maszynę Turinga $T$, która go rozstrzyga. Idea polega na sprawdzeniu, czy przecięcie języka automatu $A$ z językiem słów o nieparzystej liczbie jedynek jest puste. \\
+
+Poniższa TM rozstrzyga język $A$. \\
+\textit{,,Na wejściu $\langle M \rangle$:}
+\begin{enumerate}
+    \item Skonstruuj DFA $O$, który akceptuje każdy ciąg zawierający nieparzystą liczbę jedynek.
+    \item Skonstruuj DFA $B$ taki, że $L(B) = L(M) \cap L(O)$.
+    \item Uruchom decyder dla języka $E_{\text{DFA}}$ (problem pustości DFA) na wejściu $\langle B \rangle$.
+    \item Jeśli $T$ akceptuje, zaakceptuj; jeśli $T$ odrzuca, odrzuć.''
+\end{enumerate}
+
+
+
+\section{Zadanie 6}
+\subsection{Suma $ L_1 \cup L_2$}
+Niech $L_1$ i $L_2$ będą językami rozstrzygalnymi, a $M_1$ i $M_2$ będą maszynami Turinga, które je rozstrzygają. Konstruujemy maszynę M rozstrzygającą sumę  $L_1 \cup L_2$.
+\begin{itemize}
+    \item Uruchom $M_1$ na wejściu w. $M_1$ jest maszyną rozstrzygającą, dlatego zawsze się zatrzyma. 
+    \item Jeśli $M_1$ akceptuje to akceptuj.
+    \item Jeżeli $M_1$ odrzuca to  uruchom $M_2$ na wejściu w. $M_2$ jest maszyną rozstrzygającą, dlatego zawsze się zatrzyma. 
+    \item Jeśli $M_2$ akceptuje to akceptuj. W przeciwnym razie odrzuć.
+\end{itemize}
+
+Maszyna M zawsze się zatrzymuje, ponieważ $M_1$ i $M_2$ zawsze się  zatrzymują.
+
+\subsection{Dopełnienie}
+Niech $L_1$ będzie rozstrzygalny przez $M_1$, konstruujemy maszynę M rozstrzygającą dopełnienie $L_1$.
+\begin{itemize}
+    \item uruchom $M_1$ na wejściu w
+    \item $M_1$ zawsze się zatrzyma, bo jest maszyną rozstrzygającą
+    \item jeżeli $M_1$ akceptuje to M odrzuca; jeżeli $M_1$ odrzuca to M akceptuje
+\end{itemize}
+
+M jest maszyną rozstrzygającą, ponieważ ma identyczny czas zatrzymania jak $M_1$.
+
+\subsection{Przekrój $L_1 \cap L_2$}
+Niech $L_1$ i $L_2$ będą rozstrzygalne przez $M_1$ i $M_2$, konstruujemy maszynę M rozstrzygającą przekrój $L_1 \cap L_2$.
+
+\begin{itemize}
+    \item uruchom $M_1$ na wejściu w
+    \item jeżeli $M_1$ odrzuca to M odrzuca i zatrzymuje się
+    \item jeżeli $M_1$ akceptuje to uruchom $M_2$ na wejściu w
+    \item jeżeli $M_2$ akceptuje to M akceptuje. w przeciwnym wypadku odrzuca.
+\end{itemize}
+
+Maszyna M zawsze się zatrzyma, ponieważ zarówno $M_1$ jak i $M_2$ zawsze się zatrzymują.
+\section{Zadanie 7}
+\subsection{Suma $ L_1 \cup L_2$}
+Maszyna M rozpoznająca sumę $ L_1 \cup L_2$ działa na wejściu w w następujący sposób:
+\begin{itemize}
+    \item M symuluje maszyny $M_1$ dla $L_1$ oraz $M_2$ dla $L_2$ na wejściiu w równocześnie przeplatając ich kroki
+    \item jeżeli którakolwiek z maszyn zaakceptuje to M również akceptuje i zatrzymuje się
+\end{itemize}
+
+Dzięki symulacji równoległej, jeśli w należy do sumy, maszyna M znajdzie akceptację i się zatrzyma, nawet jeśli druga maszyna by się zapętliła.
+
+\subsection{Przekrój $L_1 \cap L_2$}
+Maszyna M rozpoznająca przekrój $L_1 \cap L_2$ działa na wejściu w:
+\begin{itemize}
+    \item M symuluje $M_1$ na w i $M_2$ na w równolegle (przeplatając kroki)
+    \item jeśli $M_1$ akceptuje ORAZ $M_2$ akceptuje to M również akceptuje i zatrzymuje się
+\end{itemize}
+
+Obie akceptacje są wymagane. Symulacja równoległa zapewnia, że M znajdzie obie akceptacje w skończonym czasie, jeśli w należy do obu języków.
+
+\section*{Nierozstrzygalność}
+\setcounter{section}{0}
+\section{Zadanie 1 - tego nie było}
+
+Aby wykazać, że $EQ_{CFG}$ jest nierozstrzygalny, możemy pokazać, że $ALL_{CFG} \le_M EQ_{CFG}$. 
+
+Poniższa Maszyna Turinga $F$ oblicza tę redukcję:
+
+$F = $ „Dla wejścia $\langle G \rangle$, gdzie $G$ jest gramatyką bezkontekstową (CFG):
+\begin{enumerate}
+    \item Podaj na wyjściu $\langle G, G' \rangle$, gdzie $L(G') = \Sigma^*$.”
+\end{enumerate}
+
+Oczywiście $G \in ALL_{CFG} \iff \langle G, G' \rangle \in EQ_{CFG}$, ponieważ:
+\begin{itemize}
+    \item $L(G) = \Sigma^* \land \Sigma^* = L(G') \implies \langle G, G' \rangle \in EQ_{CFG}$ oraz
+    \item $L(G) \neq \Sigma^* \land \Sigma^* = L(G') \implies \langle G, G' \rangle \notin EQ_{CFG}$ z definicji $EQ_{CFG}$.
+\end{itemize}
+
+Gdyby $EQ_{CFG}$ był rozstrzygalny, wówczas $ALL_{CFG}$ również musiałby taki być. $ALL_{CFG}$ jest nierozstrzygalny, więc $EQ_{CFG}$ nie może być rozstrzygalny.
+
+\section{Zadanie 2}
+\subsection*{(a) $INF_{TM} = \{\langle M \rangle \mid L(M) \text{ jest językiem nieskończonym}\}$}
+
+\begin{itemize}
+    \item \textbf{Własność jest spełniona:} Istnieje TM $M_1$, która akceptuje język nieskończony. Np. $M_1$ akceptuje $\Sigma^*$ (wszystkie słowa). Język $\Sigma^*$ jest nieskończony.
+    \item \textbf{Własność nie jest spełniona:} Istnieje TM $M_2$, która akceptuje język skończony. Np. $M_2$ akceptuje $\emptyset$ (język pusty) lub $\{0, 1\}$ (język zawierający tylko dwa słowa).
+\end{itemize}
+Własność jest nietrywialna. Z Twierdzenia Rice’a, $INF_{TM}$ jest nierozstrzygalny.
+
+\subsection*{(b) $L_B = \{\langle M \rangle \mid 1011 \in L(M)\}$}
+
+\begin{itemize}
+    \item \textbf{Własność jest spełniona:} Istnieje TM $M_1$, która akceptuje wszystkie słowa, w tym $1011$. Np. $M_1$ akceptuje $\Sigma^*$.
+    \item \textbf{Własność nie jest spełniona:} Istnieje TM $M_2$, która akceptuje język pusty $L(M_2)=\emptyset$, który nie zawiera słowa $1011$.
+\end{itemize}
+Własność jest nietrywialna. Z Twierdzenia Rice’a, $L_B$ jest nierozstrzygalny.
+
+\subsection*{(c) $ALL_{TM} = \{\langle M \rangle \mid L(M) = \Sigma^*\}$}
+
+\begin{itemize}
+    \item \textbf{Własność jest spełniona:} Istnieje TM $M_1$, która akceptuje $\Sigma^*$. Np. $M_1$ natychmiast akceptuje każde wejście.
+    \item \textbf{Własność nie jest spełniona:} Istnieje TM $M_2$, która akceptuje język pusty $L(M_2)=\emptyset$. Ponieważ $\emptyset \neq \Sigma^*$, $L(M_2)$ nie posiada tej własności.
+\end{itemize}
+Własność jest nietrywialna. Z Twierdzenia Rice’a, $ALL_{TM}$ jest nierozstrzygalny.
+
+
+\section{Zadanie 3}
+
+Niech $A = \{0^n 1^n \mid n \ge 0\}$ oraz $B = \{1\}$. \\
+Język $A$ nie jest regularny, język $B$ jest regularny.
+
+Definiując obliczalną funkcję $f$ wzorem:
+\[
+f(w) = 
+\begin{cases} 
+1 & \text{jeżeli } w \in A \\
+0 & \text{jeżeli } w \notin A
+\end{cases}
+\]
+otrzymujemy $A \le_m B$.
+
+\section{Zadanie 4}
+\begin{enumerate}
+    \item Załóżmy, że $A \leq_{\text{m}} \overline{A}$. Z własności redukcji m-obliczalnej wynika, że jeśli dany język redukuje się do innego, to ich dopełnienia również podlegają tej samej redukcji. Zatem:
+    $$ \overline{A} \leq_{\text{m}} \overline{\overline{A}}, \text{ co oznacza, że } \overline{A} \leq_{\text{m}} A $$
+
+    \item Skoro z założenia język $A$ jest rozpoznawalny w sensie Turinga, to język $\overline{A}$ również jest rozpoznawalny w sensie Turinga.
+
+\end{enumerate}
+
+\noindent Język $A$ jest rozstrzygalny, ponieważ język jest rozstrzygalny wtedy i tylko wtedy, gdy jest rozpoznawalny w sensie Turinga i jego dopełnienie jest rozpoznawalne w sensie Turinga.
+
+\section{Zadanie 5}
+Skoro $B \neq \emptyset$ i $B \neq \Sigma^*$, to istnieje co najmniej jedno słowo $b_{tak} \in B$ oraz co najmniej jedno słowo $b_{nie} \notin B$.
+
+Konstruujemy funkcję $f(w)$:\\
+1. Przetestuj, czy $w \in A$ (możemy to zrobić, bo $A$ jest rozstrzygalny).\\
+2. Jeśli $w \in A$, zwróć $b_{tak}$.\\
+3. Jeśli $w \notin A$, zwróć $b_{nie}$.\\
+
+Ponieważ $w \in A \iff f(w) \in B$, funkcja $f$ jest poprawną redukcją.
+
+\section*{Złożoność obliczeniowa}
+\setcounter{section}{0}
+
+\section{Zadanie 1}
+
+\subsection*{(a) Suma: $A \cup B \in \text{P}$}
+
+Konstruujemy maszynę $M_{A \cup B}$, która dla wejścia $x$ o długości $n$:
+\begin{enumerate}
+    \item Uruchamia $M_A(x)$. Jeśli $M_A$ zaakceptuje, $M_{A \cup B}$ \textbf{akceptuje}.
+    \item Jeśli $M_A$ odrzuci, uruchamia $M_B(x)$. Jeśli $M_B$ zaakceptuje, $M_{A \cup B}$ \textbf{akceptuje}.
+    \item W przeciwnym razie \textbf{odrzuca}.
+\end{enumerate}
+Całkowity czas działania to $O(n^{\max(k,m)})$, co jest funkcją wielomianową. Zatem $A \cup B \in \text{P}$.
+
+
+\subsection*{(b) Konkatenacja: $A \circ B \in \text{P}$}
+
+Konstruujemy maszynę $M_{A \circ B}$, która dla wejścia $x$ o długości $n$:
+\begin{enumerate}
+    \item Dla każdego możliwego podziału słowa $x$ na dwie części $y$ i $z$ (takich, że $x = yz$):
+    \begin{itemize}
+        \item Uruchom $M_A(y)$ oraz $M_B(z)$.
+        \item Jeśli obie maszyny zaakceptują, $M_{A \circ B}$ \textbf{akceptuje} i kończy pracę.
+    \end{itemize}
+    \item Jeśli żaden podział nie został zaakceptowany, \textbf{odrzuca}.
+\end{enumerate}
+Liczba możliwych podziałów wynosi $n+1$. Całkowity czas wynosi $O(n^{\max(k,m)+1})$, co jest wielomianem. Zatem $A \circ B \in \text{P}$.
+
+
+\subsection*{(c) Dopełnienie: $\overline{A} \in \text{P}$}
+
+Konstruujemy maszynę $M_{\overline{A}}$, która dla wejścia $x$:
+\begin{enumerate}
+    \item Uruchamia $M_A(x)$.
+    \item Jeśli $M_A$ zaakceptuje, $M_{\overline{A}}$ \textbf{odrzuca}.
+    \item Jeśli $M_A$ odrzuci, $M_{\overline{A}}$ \textbf{akceptuje}.
+\end{enumerate}
+Złożoność czasowa jest identyczna jak dla $M_A$, czyli $O(n^k)$. Ponieważ czas wielomianowy zostaje zachowany, $\overline{A} \in \text{P}$.
+
+\section{Zadanie 2}
+\subsection*{a) Suma: $A \cup B \in \text{NP}$}
+Niech $A,B \in \mathbf{NP}$.  
+Z definicji klasy $\mathbf{NP}$ istnieją niedeterministyczne maszyny Turinga
+$M_A$ oraz $M_B$, które akceptują odpowiednio języki $A$ i $B$ w czasie
+wielomianowym.
+
+Konstruujemy niedeterministyczną maszynę Turinga $M$, która na wejściu $w$:
+\begin{enumerate}
+    \item niedeterministycznie wybiera jedną z dwóch możliwości:
+    \begin{itemize}
+        \item uruchamia $M_A(w)$,
+        \item uruchamia $M_B(w)$;
+    \end{itemize}
+    \item jeśli wybrana maszyna zaakceptuje, to $M$ akceptuje;
+    \item w przeciwnym razie $M$ odrzuca.
+\end{enumerate}
+
+Maszyna $M$ akceptuje słowo $w$ wtedy i tylko wtedy, gdy $w \in A \cup B$.
+Czas obliczeń jest wielomianowy $O(n^{\max(k_1,k_2)})$, zatem
+$A \cup B \in \mathbf{NP}$.
+
+\subsection*{b) Konkatenacja: $A \circ B \in \text{NP}$}
+Niech $A,B \in \mathbf{NP}$.  
+Istnieją niedeterministyczne maszyny Turinga $M_A$ i $M_B$,
+działające w czasie wielomianowym, które akceptują odpowiednio języki
+$A$ i $B$.
+
+Konstruujemy niedeterministyczną maszynę Turinga $M$, która na wejściu $w$:
+\begin{enumerate}
+    \item niedeterministycznie wybiera podział słowa $w$ na dwa słowa
+    $w = xy$;
+    \item uruchamia maszynę $M_A(x)$ oraz maszynę $M_B(y)$;
+    \item jeśli obie maszyny zaakceptują, to $M$ akceptuje;
+    \item w przeciwnym razie $M$ odrzuca.
+\end{enumerate}
+
+Maszyna $M$ akceptuje słowo $w$ wtedy i tylko wtedy, gdy
+$w \in A \circ B$ oraz działa w czasie wielomianowym $O(n^{\max(k_1k_2)+1})$, zatem
+$A \circ B \in \mathbf{NP}$.
+
+\section{Zadanie 3}
+Zgodnie z założeniami zadania istnieje ciąg znaków $w_{in} \in B$ oraz ciąg $w_{out} \notin B$. Chcemy pokazać, że $B$ jest NP-zupełny.
+
+Musimy wykazać, że $A \le_P B$.
+
+\begin{quote}
+„Dla wejścia $w$:
+\begin{enumerate}
+    \item Uruchom $M_A$ (rozstrzygacz dla $A$) na wejściu $w$.
+    \item Jeśli $M_A$ zaakceptował, wypisz $w_{in}$.
+    \item Jeśli $M_A$ odrzucił, wypisz $w_{out}$.”
+\end{enumerate}
+\end{quote}
+
+Ponieważ $M_A$ działa w czasie wielomianowym, a wypisanie stałych ciągów $w_{in}$ lub $w_{out}$ zajmuje czas stały, cała funkcja $f$ jest obliczalna w czasie wielomianowym, co dowodzi, że $B$ jest NP-zupełny.
+
+\section{Zadanie 4}
+\begin{enumerate}
+    \item Problem PATH (rozstrzygalność istnienia ścieżki w grafie skierowanym) należy do klasy $P$.
+    \item Z definicji, jeśli jakikolwiek problem NP-zupełny należy do klasy $P$, to $P = NP$.
+    \item Zatem, jeśli PATH jest NP-zupełny, to fakt jego przynależności do $P$ wymusza równość $P = NP$.
+\end{enumerate}
+
+\section{Zadanie 5}
+\begin{enumerate}
+    \item Załóżmy przeciwnie, że $P = NP$.
+    \item Zgodnie z udowodnionym wcześniej zadaniem, jeśli $P = NP$, to każdy język $B \in P \setminus \{\emptyset, \Sigma^*\}$ jest NP-zupełny.
+    \item Wiemy, że problem PATH (rozstrzyganie istnienia ścieżki w grafie) należy do klasy $P$ (można go rozwiązać np. algorytmem BFS).
+    \item Ponieważ PATH nie jest językiem pustym ($\emptyset$) ani językiem wszystkich słów ($\Sigma^*$), przy założeniu $P = NP$ musi on być NP-zupełny.
+    \item Otrzymujemy sprzeczność z założeniem tezy, że PATH \textbf{nie jest} NP-zupełny.
+    \item Zatem nasze założenie o równości klas musi być fałszywe, co oznacza, że $P \neq NP$.
+\end{enumerate}
+
+\section{Zadanie 6}
+Z definicji, język $L$ jest PSPACE-trudny, jeżeli dla każdego języka $A \in \text{PSPACE}$ zachodzi redukcja $A \le_P L$.
+\begin{enumerate}
+    \item Wiemy, że zachodzi inkluzja klas złożoności: $\text{NP} \subseteq \text{PSPACE}$. Każdy problem, który można rozwiązać niedeterministycznie w czasie wielomianowym, można również rozwiązać w pamięci wielomianowej.
+    \item Skoro każdy język $A \in \text{PSPACE}$ redukuje się do $L$, to w szczególności każdy język $A' \in \text{NP}$ również musi redukować się do $L$ (ponieważ $A'$ jest elementem zbioru PSPACE).
+    \item Warunek „każdy język z NP redukuje się do $L$” jest definicją NP-trudności.
+\end{enumerate}
+Zatem $L$ jest NP-trudny.
+
+\end{document}
