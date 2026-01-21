@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\title{Teoria obliczeń i złożoność obliczeniowa - Lista 13}
+\author{Kamila Wasik}
+\date{Październik 2025}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Zadanie 1}
+Niech $G = (V, E)$ będzie grafem ze zbiorem wierzchołków $V$ i zbiorem krawędzi $E$. 
+Wyliczamy wszystkie trójki $(u, v, w)$ wierzchołków $u, v, w \in V$ takich, że $u < v < w$, 
+a następnie sprawdzamy, czy wszystkie trzy krawędzie $(u, v)$, $(v, w)$ oraz $(u, w)$ istnieją w zbiorze $E$. \\
+Wyliczenie wszystkich trójek wymaga czasu $O(|V|^3)$. Sprawdzenie, czy wszystkie trzy krawędzie 
+należą do $E$, zajmuje czas $O(|E|)$. \\
+Zatem całkowity czas wynosi $O(|V|^3 |E|)$, 
+co jest wielomianem względem długości wejścia $\langle G \rangle$. 
+W związku z tym, $TRIANGLE \in P$.
+
+\section{Zadanie 2}
+
+Każda determistyczna TM jest niedeterministyczna TM, a to oznacza że nasz język A Należy do P. 
+1. Niech A należy do P: \\
+2. Z definicji A jest rozstrzygalny przez pewną deterministyczną TM M działającą w czasie wielomianowym. \\
+3. Ponieważ każda deterministyczna TM jest NTM to ozn. że język A jest rozstrzygalny przez niedeterministyczna maszyna turinga M dzialajca w czasie wielomianowym. \\
+
+\section{Zadanie 2}
+\subsection*{a) Suma: $A \cup B \in \text{NP}$}
+Niech $A,B \in \mathbf{NP}$.  
+Z definicji klasy $\mathbf{NP}$ istnieją niedeterministyczne maszyny Turinga
+$M_A$ oraz $M_B$, które akceptują odpowiednio języki $A$ i $B$ w czasie
+wielomianowym.
+
+Konstruujemy niedeterministyczną maszynę Turinga $M$, która na wejściu $w$:
+\begin{enumerate}
+    \item niedeterministycznie wybiera jedną z dwóch możliwości:
+    \begin{itemize}
+        \item uruchamia $M_A(w)$,
+        \item uruchamia $M_B(w)$;
+    \end{itemize}
+    \item jeśli wybrana maszyna zaakceptuje, to $M$ akceptuje;
+    \item w przeciwnym razie $M$ odrzuca.
+\end{enumerate}
+
+Maszyna $M$ akceptuje słowo $w$ wtedy i tylko wtedy, gdy $w \in A \cup B$.
+Czas obliczeń jest wielomianowy $O(n^{\max(k_1,k_2)})$, zatem
+$A \cup B \in \mathbf{NP}$.
+
+\subsection*{b) Konkatenacja: $A \circ B \in \text{NP}$}
+Niech $A,B \in \mathbf{NP}$.  
+Istnieją niedeterministyczne maszyny Turinga $M_A$ i $M_B$,
+działające w czasie wielomianowym, które akceptują odpowiednio języki
+$A$ i $B$.
+
+Konstruujemy niedeterministyczną maszynę Turinga $M$, która na wejściu $w$:
+\begin{enumerate}
+    \item niedeterministycznie wybiera podział słowa $w$ na dwa słowa
+    $w = xy$;
+    \item uruchamia maszynę $M_A(x)$ oraz maszynę $M_B(y)$;
+    \item jeśli obie maszyny zaakceptują, to $M$ akceptuje;
+    \item w przeciwnym razie $M$ odrzuca.
+\end{enumerate}
+
+Maszyna $M$ akceptuje słowo $w$ wtedy i tylko wtedy, gdy
+$w \in A \circ B$ oraz działa w czasie wielomianowym $O(n^{\max(k_1k_2)+1})$, zatem
+$A \circ B \in \mathbf{NP}$.
+
+\section{Zadanie 4}
+Niech $A \in NP$. Skonstruuj niedeterministyczną maszynę Turinga (NTM) $M$, która rozstrzyga $A^*$ w niedeterministycznym czasie wielomianowym.
+
+$M = $ „Na wejściu $w$:
+\begin{enumerate}
+    \item Niedeterministycznie podziel $w$ na fragmenty $w = x_1 x_2 \dots x_k$.
+    \item Dla każdego $x_i$, niedeterministycznie odgadnij certyfikaty, które pokazują, że $x_i \in A$.
+    \item Zweryfikuj wszystkie certyfikaty, jeśli to możliwe, a następnie \textbf{zaakceptuj} (\textit{accept}). 
+    W przeciwnym razie, jeśli weryfikacja zakończy się niepowodzeniem, \textbf{odrzuć} (\textit{reject}).”
+\end{enumerate}
+
+\section{Zadanie 5}
+\textbf{Dowód, że $ISO \in NP$:}
+
+\begin{enumerate}
+    \item Certyfikatem jest bijekcja $f: V(G) \to V(H)$, reprezentowana jako wektor permutacji wierzchołków.
+    \item Dla każdej pary wierzchołków $u, v \in V(G)$ sprawdź, czy:
+    \[ (u, v) \in E(G) \iff (f(u), f(v)) \in E(H) \]
+    \item Weryfikacja wymaga sprawdzenia wszystkich par wierzchołków, co zajmuje czas $O(n^2)$. Ponieważ weryfikacja odbywa się w czasie wielomianowym względem rozmiaru wejścia, $ISO \in NP$.
+\end{enumerate}
+
+\section{Zadanie 6}
+
+\begin{enumerate}
+    \item[(a)] Uzasadnienie rozstrzygalności:
+    Aby rozstrzygnąć język $TES$, konstruujemy deterministyczną maszynę Turinga $D$, która dla wejścia $\langle M, n \rangle$:
+    \begin{itemize}
+        \item Symuluje wszystkie możliwe ścieżki obliczeń niedeterministycznej maszyny $M$ na słowie pustym $\varepsilon$ do głębokości dokładnie $n$ kroków.
+        \item Ponieważ liczba stanów i symboli alfabetu maszyny $M$ jest skończona, liczba konfiguracji osiągalnych w $n$ krokach jest również skończona ($b^n$, gdzie $b$ to maksymalny stopień niedeterminizmu).
+        \item Jeśli jakakolwiek ścieżka osiągnie stan akceptujący w czasie $t \le n$, maszyna $D$ akceptuje. W przeciwnym razie (jeśli wszystkie ścieżki zakończą się przed akceptacją lub przekroczą $n$ kroków), $D$ odrzuca.
+    \end{itemize}
+    Ponieważ symulacja zawsze kończy się po skończonej liczbie kroków, $TES$ jest rozstrzygalny.
+
+    \item[(b)] \textbf{Czy $TES \in NP$?}\\
+    Nie (przy założeniu standardowych klas złożoności), ponieważ $n$ jest zapisane binarnie.
+    \begin{itemize}
+        \item Rozmiar wejścia $| \langle M, n \rangle |$ jest proporcjonalny do $\log_2 n$ (ze względu na zapis binarny).
+        \item Czas potrzebny na weryfikację certyfikatu (ścieżki akceptującej o długości $n$) wynosi $O(n)$.
+        \item Jednak $n = 2^{\log_2 n}$, co oznacza, że czas weryfikacji jest wykładniczy względem rozmiaru wejścia ($2^{|wejście|}$), a nie wielomianowy.
+        \item Aby problem należał do $NP$, czas weryfikacji musiałby być wielomianowy względem liczby bitów użytych do zapisu liczby $n$.
+    \end{itemize}
+\end{enumerate}
+
+
+
+\end{document}

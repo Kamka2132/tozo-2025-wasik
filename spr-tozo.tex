@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{geometry}
+\usepackage{graphicx}
 
 \geometry{a4paper, margin=1in}
 
@@ -20,7 +21,7 @@
 
 \section{Zadanie 1}
 
-\subsection*{1a) $L = \{w \in \{0, 1\}^* \mid w \text{ kończy się jedynką}\}$}
+\subsection*{1a Nie było w sisper solutions) $L = \{w \in \{0, 1\}^* \mid w \text{ kończy się jedynką}\}$}
 
 \textbf{Opis formalny maszyny $M_a$:} \\
 Maszyna Turinga $M_a$ jest zdefiniowana jako krotka:
@@ -39,6 +40,9 @@ $M_a = (Q, \Sigma, \Gamma, \delta, q_0, q_A, q_R)$
     \item Jeśli odczytany symbol to $1$, maszyna przechodzi do stanu akceptującego $q_A$.
     \item Jeśli odczytany symbol to $0$ lub jeśli taśma była pusta ($\sqcup$), maszyna przechodzi do stanu odrzucającego $q_R$.
 \end{enumerate}
+
+
+
 
 \hrule
 \vspace{0.5cm}
@@ -109,16 +113,16 @@ $M_d = (Q, \Sigma, \Gamma, \delta, q_0, q_1, q_2, q_3, q_A, q_R)$
 
 
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Zadanie1.jpeg}
+    \caption{Zadanie 1}
+    \label{fig:placeholder}
+\end{figure}
 
 
-
-
-
-
-
-
-
-\section{Zadanie 2}
+\newpage
+\section{Zadanie 2 - na zajęciach}
 \subsection{A = $\{$ w $|$ w zawiera jednakową liczbę 0 i 1$\}$}
 \begin{enumerate}
     \item Pętla - maszyna powtarza swoją czynnośc dopóki nie przekreśli wszystkich symboli 0 i 1. Czyli skanuje taśmę, znajduje pierwsze nieprzekreślone 0 lub 1 i skreśla je.
@@ -144,7 +148,8 @@ Język C jest dopełnieniem języka B. Ponieważ B jest rozstrzygalny przez $M_B
 
 \section*{Rozstrzygalność}
 \setcounter{section}{0}
-\section{Zadanie 1}
+\section{Zadanie 1 - nie znalazlam w sipserze, robione na zajęciach}
+
 Problem można wyrazić jako język $EQ_{DFA,REX}$, czyli język równoważności DFA i REX.
 
 $EQ_{DFA,REX}$ = $\{$ $<A,R>$ $|$ A jest DFA, R jest wyrażeniem regularnym oraz L(A) = L(R)$\}$
@@ -164,13 +169,14 @@ Język $EQ_{DFA,REX}$ jest rozstrzygalny, ponieważ możemy zbudować maszyne Tu
 \end{itemize}
 
 Ponieważ zarówno przekształcenie REX $\rightarrow$ DFA, jak i sprawdzenie równoważności dwóch DFA ($EQ_{DFA}$) są algorytmami, które zawsze się zatrzymują, cała procedura również zawsze sięzatrzymuje. Zatem problem jest rozstrzygalny.
-\section{Zadanie 2}
+
+\section{Zadanie 2 Nie było w sipserze - robione na zajęciach}
 Jeśli DFA akceptuje wszystkie słowa ($\Sigma$*), to żaden z jego stanów nieakceptujących nie może być osiągalny.
 
 Rozstrzygalnik $M_{ALL}$ działa w następujący sposób dla wejścia $<A>$:
 
 \begin{enumerate}
-    \item Modyfikacja $DFA_A$
+    \item Modyfikacja $DFA$ A
     \begin{itemize}
         \item tworzymy automat A', którego zbiorem stanów akceptujących jest zbiór stanów nieakceptujących automatu A
         \item Język L(A') jest językiem słów, które nie są akceptowalne przez A. Zatem $L(A') = \overline{L(A)}$ (dopełnienie)
@@ -185,9 +191,9 @@ Rozstrzygalnik $M_{ALL}$ działa w następujący sposób dla wejścia $<A>$:
 \end{enumerate}
 Ponieważ dopełnienie DFA i problem $E_{DFA}$ są rozstrzygalne i zawsze sięzatrzymują, $ALL_{DFA}$ też jest rozstrzygalny.
 
-\section{Zadanie 3}
+\section{Zadanie 3 - z sipser solutions}
 
-Niech $s_1, s_2, s_3, ...$ będzie listą wszystkich ciągów znaków (słów) w $\Sigma$*. Poniższa Maszyna Turinga rozpoznaje język $\overline{E_{TM}}$
+Niech $s_1, s_2, s_3, ...$ będzie listą wszystkich słów w $\Sigma$*. Poniższa Maszyna Turinga rozpoznaje język $\overline{E_{TM}}$
 
 $$I = \text{"Na wejściu } \langle M \rangle, \text{ gdzie } M \text{ jest Maszyną Turinga:''}$$
 
@@ -200,7 +206,7 @@ $$I = \text{"Na wejściu } \langle M \rangle, \text{ gdzie } M \text{ jest Maszy
 
 \end{enumerate}
 
-\section{Zadanie 4}
+\section{Zadanie 4 - z sipser solutions}
 $$INFINITE_{DFA} = \{\langle A \rangle \mid A \text{ jest DFA oraz } L(A) \text{ jest językiem nieskończonym}\}$$
 
 $$I = \text{``Na wejściu } \langle A \rangle, \text{ gdzie } A \text{ jest DFA:''}$$
@@ -223,21 +229,20 @@ Uzasadnienie:
 
 Jeśli algorytm akceptuje DFA, to ten DFA akceptuje jakiś ciąg o długości $k$ lub większej, gdzie $k$ jest liczbą stanów DFA. Ten ciąg można ``pompować'' (zgodnie z lematem o pompowaniu dla języków regularnych), aby uzyskać nieskończenie wiele akceptowanych ciągów.
 
-\section{Zadanie 5 }
-Aby wykazać, że język $K$ jest rozstrzygalny, skonstruujemy maszynę Turinga $T$, która go rozstrzyga. Idea polega na sprawdzeniu, czy przecięcie języka automatu $A$ z językiem słów o nieparzystej liczbie jedynek jest puste. \\
+\section{Zadanie 5 z sipser solutions}
 
-Poniższa TM rozstrzyga język $A$. \\
-\textit{,,Na wejściu $\langle M \rangle$:}
+Poniższa TM rozstrzyga język $K$. \\
+\textit{,,Na wejściu $\langle M \rangle$, gdzie M jest TM:}
 \begin{enumerate}
-    \item Skonstruuj DFA $O$, który akceptuje każdy ciąg zawierający nieparzystą liczbę jedynek.
-    \item Skonstruuj DFA $B$ taki, że $L(B) = L(M) \cap L(O)$.
-    \item Uruchom decyder dla języka $E_{\text{DFA}}$ (problem pustości DFA) na wejściu $\langle B \rangle$.
+    \item Skonstruuj DFA $A$, który akceptuje każdy ciąg zawierający nieparzystą liczbę jedynek.
+    \item Skonstruuj DFA $B$ taki, że $L(B) = L(M) \cap L(A)$.
+    \item Uruchom decyder T dla języka $E_{\text{DFA}}$ na wejściu $\langle B \rangle$.
     \item Jeśli $T$ akceptuje, zaakceptuj; jeśli $T$ odrzuca, odrzuć.''
 \end{enumerate}
 
 
 
-\section{Zadanie 6}
+\section{Zadanie 6 - robiliśmy na zajęciach}
 \subsection{Suma $ L_1 \cup L_2$}
 Niech $L_1$ i $L_2$ będą językami rozstrzygalnymi, a $M_1$ i $M_2$ będą maszynami Turinga, które je rozstrzygają. Konstruujemy maszynę M rozstrzygającą sumę  $L_1 \cup L_2$.
 \begin{itemize}
@@ -270,7 +275,7 @@ Niech $L_1$ i $L_2$ będą rozstrzygalne przez $M_1$ i $M_2$, konstruujemy maszy
 \end{itemize}
 
 Maszyna M zawsze się zatrzyma, ponieważ zarówno $M_1$ jak i $M_2$ zawsze się zatrzymują.
-\section{Zadanie 7}
+\section{Zadanie 7 - robiliśmy na zajęciach}
 \subsection{Suma $ L_1 \cup L_2$}
 Maszyna M rozpoznająca sumę $ L_1 \cup L_2$ działa na wejściu w w następujący sposób:
 \begin{itemize}
@@ -283,7 +288,7 @@ Dzięki symulacji równoległej, jeśli w należy do sumy, maszyna M znajdzie ak
 \subsection{Przekrój $L_1 \cap L_2$}
 Maszyna M rozpoznająca przekrój $L_1 \cap L_2$ działa na wejściu w:
 \begin{itemize}
-    \item M symuluje $M_1$ na w i $M_2$ na w równolegle (przeplatając kroki)
+    \item M symuluje maszyny $M_1$ dla $L_1$ oraz $M_2$ dla $L_2$ na wejściiu w równocześnie przeplatając ich kroki
     \item jeśli $M_1$ akceptuje ORAZ $M_2$ akceptuje to M również akceptuje i zatrzymuje się
 \end{itemize}
 
@@ -291,13 +296,13 @@ Obie akceptacje są wymagane. Symulacja równoległa zapewnia, że M znajdzie ob
 
 \section*{Nierozstrzygalność}
 \setcounter{section}{0}
-\section{Zadanie 1 - tego nie było}
+\section{Zadanie 1 - tego nie było, rozw ok}
 
 Aby wykazać, że $EQ_{CFG}$ jest nierozstrzygalny, możemy pokazać, że $ALL_{CFG} \le_M EQ_{CFG}$. 
 
-Poniższa Maszyna Turinga $F$ oblicza tę redukcję:
+Poniższa Maszyna Turinga $M$ oblicza tę redukcję:
 
-$F = $ „Dla wejścia $\langle G \rangle$, gdzie $G$ jest gramatyką bezkontekstową (CFG):
+$M = $ „Dla wejścia $\langle G \rangle$, gdzie $G$ jest gramatyką bezkontekstową (CFG):
 \begin{enumerate}
     \item Podaj na wyjściu $\langle G, G' \rangle$, gdzie $L(G') = \Sigma^*$.”
 \end{enumerate}
@@ -310,7 +315,7 @@ Oczywiście $G \in ALL_{CFG} \iff \langle G, G' \rangle \in EQ_{CFG}$, ponieważ
 
 Gdyby $EQ_{CFG}$ był rozstrzygalny, wówczas $ALL_{CFG}$ również musiałby taki być. $ALL_{CFG}$ jest nierozstrzygalny, więc $EQ_{CFG}$ nie może być rozstrzygalny.
 
-\section{Zadanie 2}
+\section{Zadanie 2 - tylko a) z sipser solutions, rozw ok}
 \subsection*{(a) $INF_{TM} = \{\langle M \rangle \mid L(M) \text{ jest językiem nieskończonym}\}$}
 
 \begin{itemize}
@@ -336,7 +341,7 @@ Własność jest nietrywialna. Z Twierdzenia Rice’a, $L_B$ jest nierozstrzygal
 Własność jest nietrywialna. Z Twierdzenia Rice’a, $ALL_{TM}$ jest nierozstrzygalny.
 
 
-\section{Zadanie 3}
+\section{Zadanie 3 - w sipserze, rozw ok}
 
 Niech $A = \{0^n 1^n \mid n \ge 0\}$ oraz $B = \{1\}$. \\
 Język $A$ nie jest regularny, język $B$ jest regularny.
@@ -351,7 +356,7 @@ f(w) =
 \]
 otrzymujemy $A \le_m B$.
 
-\section{Zadanie 4}
+\section{Zadanie 4 - z sipser solutions}
 \begin{enumerate}
     \item Załóżmy, że $A \leq_{\text{m}} \overline{A}$. Z własności redukcji m-obliczalnej wynika, że jeśli dany język redukuje się do innego, to ich dopełnienia również podlegają tej samej redukcji. Zatem:
     $$ \overline{A} \leq_{\text{m}} \overline{\overline{A}}, \text{ co oznacza, że } \overline{A} \leq_{\text{m}} A $$
@@ -362,7 +367,7 @@ otrzymujemy $A \le_m B$.
 
 \noindent Język $A$ jest rozstrzygalny, ponieważ język jest rozstrzygalny wtedy i tylko wtedy, gdy jest rozpoznawalny w sensie Turinga i jego dopełnienie jest rozpoznawalne w sensie Turinga.
 
-\section{Zadanie 5}
+\section{Zadanie 5 - w sipserze podobne, ale inne}
 Skoro $B \neq \emptyset$ i $B \neq \Sigma^*$, to istnieje co najmniej jedno słowo $b_{tak} \in B$ oraz co najmniej jedno słowo $b_{nie} \notin B$.
 
 Konstruujemy funkcję $f(w)$:\\
@@ -375,7 +380,7 @@ Ponieważ $w \in A \iff f(w) \in B$, funkcja $f$ jest poprawną redukcją.
 \section*{Złożoność obliczeniowa}
 \setcounter{section}{0}
 
-\section{Zadanie 1}
+\section{Zadanie 1 - w sipserze, rozw ok}
 
 \subsection*{(a) Suma: $A \cup B \in \text{P}$}
 
@@ -412,7 +417,7 @@ Konstruujemy maszynę $M_{\overline{A}}$, która dla wejścia $x$:
 \end{enumerate}
 Złożoność czasowa jest identyczna jak dla $M_A$, czyli $O(n^k)$. Ponieważ czas wielomianowy zostaje zachowany, $\overline{A} \in \text{P}$.
 
-\section{Zadanie 2}
+\section{Zadanie 2 - na zajeciach robiliśmy, rozw ok}
 \subsection*{a) Suma: $A \cup B \in \text{NP}$}
 Niech $A,B \in \mathbf{NP}$.  
 Z definicji klasy $\mathbf{NP}$ istnieją niedeterministyczne maszyny Turinga
@@ -453,7 +458,7 @@ Maszyna $M$ akceptuje słowo $w$ wtedy i tylko wtedy, gdy
 $w \in A \circ B$ oraz działa w czasie wielomianowym $O(n^{\max(k_1k_2)+1})$, zatem
 $A \circ B \in \mathbf{NP}$.
 
-\section{Zadanie 3}
+\section{Zadanie 3 - w sipserze, rozw ok}
 Zgodnie z założeniami zadania istnieje ciąg znaków $w_{in} \in B$ oraz ciąg $w_{out} \notin B$. Chcemy pokazać, że $B$ jest NP-zupełny.
 
 Musimy wykazać, że $A \le_P B$.
@@ -469,14 +474,19 @@ Musimy wykazać, że $A \le_P B$.
 
 Ponieważ $M_A$ działa w czasie wielomianowym, a wypisanie stałych ciągów $w_{in}$ lub $w_{out}$ zajmuje czas stały, cała funkcja $f$ jest obliczalna w czasie wielomianowym, co dowodzi, że $B$ jest NP-zupełny.
 
-\section{Zadanie 4}
+\section{Zadanie 4 - na zajęciach}
+Jak PATH $\in$ NPC, to P = NP 
 \begin{enumerate}
-    \item Problem PATH (rozstrzygalność istnienia ścieżki w grafie skierowanym) należy do klasy $P$.
-    \item Z definicji, jeśli jakikolwiek problem NP-zupełny należy do klasy $P$, to $P = NP$.
-    \item Zatem, jeśli PATH jest NP-zupełny, to fakt jego przynależności do $P$ wymusza równość $P = NP$.
+    \item PATH $\in$ NPC \{zał.\}
+    \item P $\subseteq$ NP \{wcześniej udowodnione twierdzenie\}\\
+    Mamy udowodnić, że NP $\subseteq$ P. W tym celu:
+    \item Niech A $\in$ NP \{zał. dodatkowe\}
+    \item A $\leq_p$ PATH \{1, 3\}
+    \item PATH $\in$ P \{wcześniej udowodnione twierdzenie\}
+    \item A $\in$ P \{4, 5\}
 \end{enumerate}
 
-\section{Zadanie 5}
+\section{Zadanie 5 w Sipserze, rozw ok}
 \begin{enumerate}
     \item Załóżmy przeciwnie, że $P = NP$.
     \item Zgodnie z udowodnionym wcześniej zadaniem, jeśli $P = NP$, to każdy język $B \in P \setminus \{\emptyset, \Sigma^*\}$ jest NP-zupełny.
@@ -486,7 +496,7 @@ Ponieważ $M_A$ działa w czasie wielomianowym, a wypisanie stałych ciągów $w
     \item Zatem nasze założenie o równości klas musi być fałszywe, co oznacza, że $P \neq NP$.
 \end{enumerate}
 
-\section{Zadanie 6}
+\section{Zadanie 6 w Sipserze, rozw ok}
 Z definicji, język $L$ jest PSPACE-trudny, jeżeli dla każdego języka $A \in \text{PSPACE}$ zachodzi redukcja $A \le_P L$.
 \begin{enumerate}
     \item Wiemy, że zachodzi inkluzja klas złożoności: $\text{NP} \subseteq \text{PSPACE}$. Każdy problem, który można rozwiązać niedeterministycznie w czasie wielomianowym, można również rozwiązać w pamięci wielomianowej.
